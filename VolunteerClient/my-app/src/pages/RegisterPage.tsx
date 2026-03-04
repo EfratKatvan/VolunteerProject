@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { data, Link, useNavigate } from 'react-router-dom';
+import { data, Link, useNavigate } from 'react-router';
 import { setSession } from '../auth/auth.utils';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import {
@@ -32,7 +32,7 @@ export const RegisterPage = () => {
     const user = await registerService({ ...data, userRole: data.userRole });
     setSession(user.token);
     setUser(user)
-    /*navigate(`/${Paths.home}`)*/
+    //navigate(/${Paths.home})
   };
 
     return (
@@ -56,7 +56,7 @@ export const RegisterPage = () => {
       
           <button type="submit">Register</button>
           <span>
-            already have an account? <Link to={`/${Paths.login}`}>login</Link>
+            already have an account? <Link to={Paths.login}>login</Link>
           </span>
         </form>
       );

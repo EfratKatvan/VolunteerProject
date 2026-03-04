@@ -2,21 +2,21 @@ import { Navigate } from "react-router"
 import { useAuthContext } from "./useAuthContext"
 import { Paths } from "../routes/paths"
 import type { ReactNode } from "react"
-import  {type UserRole } from "../types/enums.types"
-
+import type { UserRole } from "../types/enums.types"
+//זו קומפוננטה שעוטפת עמודים שדורשים התחברות.
 type Props = {
     children: ReactNode;
     roles?: UserRole[]
 }
 
 const AuthGuard = ({ children, roles }: Props) => {
-    const { isAuthonticated, isInitialized, user } = useAuthContext()
+    const { isAuthenticated, isInitialized, user } = useAuthContext()
 
     if (!isInitialized) {
         return <h1>Loading...</h1>
     }
 
-    if (!isAuthonticated) {
+    if (!isAuthenticated) {
         return <Navigate to={`/${Paths.login}`} />
     }
 

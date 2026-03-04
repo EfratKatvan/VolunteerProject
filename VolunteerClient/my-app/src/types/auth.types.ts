@@ -1,5 +1,6 @@
+
 import { UserRole } from "./enums.types";
-import { type AvailabilityType } from "./availabilities.types";
+import {type AvailabilityType } from "./availabilities.types";
 
 export type LoginType = {
   email: string;

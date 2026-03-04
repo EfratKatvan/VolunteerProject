@@ -1,5 +1,5 @@
 import type { FormEvent } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { setSession } from '../auth/auth.utils';
 import {
@@ -8,7 +8,6 @@ import {
 import { Paths } from '../routes/paths';
 import { useAuthContext } from '../auth/useAuthContext';
 import { type LoginType } from '../types/auth.types';
-
 export const LoginPage = () => {
   useDocumentTitle('Login');
   const navigate = useNavigate()
@@ -21,7 +20,7 @@ export const LoginPage = () => {
     const user = await loginService(data);
     setUser(user)
     setSession(user.token);
-    /*navigate(`/${Paths.home}`)*/
+    //navigate(`/${Paths.home}`)
   };
 
   return (

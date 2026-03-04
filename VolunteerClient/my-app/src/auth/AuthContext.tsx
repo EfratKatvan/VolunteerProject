@@ -1,7 +1,8 @@
 import { createContext, useEffect, useCallback, useState, type ReactNode } from "react";
-import { type UserType } from "../types/users.types"
+import { type UserType } from "../types/users.types";
 import { getSession, setSession } from "./auth.utils";
 import { loginByToken } from "../services/auth.service";
+//רכיב מרכזי שבודק אם יש משתמש מחובר, שומר את הנתונים שלו, ומאפשר לכל האפליקציה לדעת את מצב ההתחברות ולהשתמש בו.
 
 type AuthStateType = {
     user: UserType | null,
@@ -10,7 +11,7 @@ type AuthStateType = {
 
 type AuthContextType = AuthStateType & {
     setUser: (user: UserType) => void
-    isAuthonticated: boolean
+    isAuthenticated: boolean
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null)
@@ -44,7 +45,7 @@ export const AuthProvider = ({ children }: Props) => {
         initialize()
     }, [])
 
-    return <AuthContext.Provider value={{ ...authState, setUser, isAuthonticated: !!authState.user }}>
+    return <AuthContext.Provider value={{ ...authState, setUser, isAuthenticated: !!authState.user }}>
         {children}
     </AuthContext.Provider>
 }
