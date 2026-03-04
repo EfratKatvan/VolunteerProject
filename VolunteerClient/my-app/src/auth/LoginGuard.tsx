@@ -15,7 +15,7 @@ const LoginGuard = ({ children }: Props) => {
     }
 
     if (isAuthenticated) {
-        return <Navigate to={`/${Paths.home}`} />
+    //    return <Navigate to={`/${Paths.home}`} />
     }
 
     return <>{children}</>
