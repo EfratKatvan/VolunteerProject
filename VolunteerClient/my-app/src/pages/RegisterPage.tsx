@@ -1,18 +1,14 @@
 import { useState, type FormEvent } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router';
 import { setSession } from '../auth/auth.utils';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import {
   register as registerService,
-  type RegisterType,
 } from '../services/auth.service';
+import {type RegisterType} from '../types/auth.types';
 import { Paths } from '../routes/paths';
 import { useAuthContext } from '../auth/useAuthContext';
-const Role = {
-  Volunteer: 0,
-  Needy: 1,
-} as const;
-type Role = typeof Role[keyof typeof Role];
+import { UserRole } from '../types/enums.types';
 
 
 const RegisterPage = () => {
@@ -21,22 +17,14 @@ const RegisterPage = () => {
   const navigate = useNavigate();
   const { setUser } = useAuthContext();
 
-const register = async (event: FormEvent<HTMLFormElement>) => {
-  event.preventDefault();
-
-  const formData = new FormData(event.currentTarget);
-  const rawData = Object.fromEntries(formData.entries());
-
-  const data: RegisterType = {
-    ...rawData,
-    role: Number(rawData.role), // 👈 ההמרה החשובה
-  } as RegisterType;
-
-  const user = await registerService(data);
-
-  setSession(user.token);
-  setUser(user);
-  navigate(`/${Paths.home}`);
+ const register = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const data = Object.fromEntries(formData.entries()) as RegisterType;
+    const user = await registerService({ ...data, userRole: UserRole });
+    setSession(user.token);
+    setUser(user)
+    navigate(`/${Paths.home}`)
 };
 
   return (
@@ -49,11 +37,11 @@ const register = async (event: FormEvent<HTMLFormElement>) => {
 
       <div>
         <label>
-          <input type="radio" name="role" value={Role.Volunteer} defaultChecked />
+          <input type="radio" name="role" value={UserRole.Volunteer} defaultChecked />
           Volunteer
         </label>
         <label>
-          <input type="radio" name="role" value={Role.Needy} />
+          <input type="radio" name="role" value={UserRole.Needy} />
           Request Help
         </label>
       </div>

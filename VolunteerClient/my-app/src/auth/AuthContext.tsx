@@ -2,6 +2,7 @@ import { createContext, useEffect, useCallback, useState, type ReactNode } from 
 import { type UserType } from "../types/users.types";
 import { getSession, setSession } from "./auth.utils";
 import { loginByToken } from "../services/auth.service";
+//רכיב מרכזי שבודק אם יש משתמש מחובר, שומר את הנתונים שלו, ומאפשר לכל האפליקציה לדעת את מצב ההתחברות ולהשתמש בו.
 
 type AuthStateType = {
     user: UserType | null,
