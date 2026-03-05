@@ -61,5 +61,16 @@ namespace Service.Services
                 return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
             }
         }
+        public async Task<UsersDto> GetUserById(int id)
+        {
+            // שולף את כל המשתמשים ומחזיר את זה עם ה־Id המתאים
+            var user = (await _repository.GetAll())
+                        .FirstOrDefault(u => u.Id == id);
+
+            if (user == null)
+                return null;
+
+            return _mapper.Map<UsersDto>(user);
+        }
     }
 }

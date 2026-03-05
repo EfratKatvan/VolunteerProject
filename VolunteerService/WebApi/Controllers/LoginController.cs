@@ -68,5 +68,35 @@ namespace WebApiProject.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+        [HttpGet("getUserByToken")]
+        public async Task<IActionResult> GetUserByToken()
+        {
+            // קבלת ה־JWT מהכותרת Authorization
+            var authHeader = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
+                return Unauthorized();
+
+            var token = authHeader.Substring("Bearer ".Length);
+
+            // אימות הטוקן
+            var handler = new JwtSecurityTokenHandler();
+            try
+            {
+                var jwtToken = handler.ReadJwtToken(token);
+                var userIdClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "UserId");
+                if (userIdClaim == null)
+                    return Unauthorized();
+
+                var user = await _loginService.GetUserById(int.Parse(userIdClaim.Value));
+                if (user == null)
+                    return NotFound();
+
+                return Ok(user);
+            }
+            catch
+            {
+                return Unauthorized();
+            }
+        }
     }
 }
