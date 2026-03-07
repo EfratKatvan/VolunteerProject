@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;1,400;1,700&family=Sora:wght@400;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;1,400;1,700&family=Sora:wght@400;600;700&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   html, body, #root {
@@ -144,3 +144,4 @@
   .ll-foot { text-align: center; font-size: 13px; color: rgba(26,18,8,0.38); }
   .ll-foot a { color: #1a1208; font-weight: 700; text-decoration: none; }
   .ll-foot a:hover { color: #c8943c; }
+;

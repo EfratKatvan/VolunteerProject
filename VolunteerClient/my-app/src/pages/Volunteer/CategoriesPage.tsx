@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 import { useAuthContext } from '../../auth/useAuthContext';
@@ -9,13 +8,17 @@ import '../../styles/styleCategories.css';
 /* ── emoji map by name ── */
 
 
+
+
 export const CategoriesPage = () => {
   useDocumentTitle('Categories');
   const { user, setUser } = useAuthContext();
+
   const [categories, setCategories] = useState<CategoryType[]>([]);
   const [selected, setSelected] = useState<number[]>(
-    user?.categories?.map(c => c.id) ?? []);
-  const [loading,setLoading]= useState(true);
+    user?.categories?.map(c => c.id) ?? []
+  );
+  const [loading,    setLoading]     = useState(true);
 
   useEffect(() => {
     axios.get('/Categories')
@@ -23,28 +26,27 @@ export const CategoriesPage = () => {
       .catch(err => console.error('Failed to load categories:', err))
       .finally(() => setLoading(false));
   }, []);
+const toggle = async (id: number) => {
+  const isSelected = selected.includes(id);
+  const next = isSelected
+    ? selected.filter(s => s !== id)
+    : [...selected, id];
 
-  
- 
-  const toggle = async (id: number) => {
-    const isSelected = selected.includes(id);
+  setSelected(next);
 
-    try {
-      if (isSelected) {
-        await axios.delete(`/UserCategories/${user!.id}/${id}`);
-        setSelected(prev => prev.filter(s => s !== id));
-      } else {
-        await axios.post('/UserCategories', {
-          userID: user!.id,
-          categoryID: id
-        });
-        setSelected(prev => [...prev, id]);
-      }
-    } catch (err) {
-      console.error('Failed to update category:', err);
+  try {
+    if (isSelected) {
+      // הסרה
+      await axios.delete(`/Users/${user!.id}/category/${id}`);
+    } else {
+      // הוספה
+      await axios.post(`/Users/${user!.id}/category/${id}`);
     }
-  };
-
+  } catch (err) {
+    setSelected(selected); // מחזיר למצב הקודם במקרה של שגיאה
+    console.error('Failed to update categories:', err);
+  }
+};
   return (
     <div className="cat-root">
 
@@ -87,7 +89,6 @@ export const CategoriesPage = () => {
                 onClick={() => toggle(cat.id)}
               >
                 <div className="cat-card-top">
-
                   <div className={`cat-card-check ${isOn ? 'cat-card-check-on' : ''}`}>
                     {isOn && '✓'}
                   </div>
@@ -106,11 +107,10 @@ export const CategoriesPage = () => {
           <div className="cat-section-label" style={{ marginTop: 40 }}>YOUR CURRENT SELECTION</div>
           <div className="cat-selection">
             {selected.map(id => {
-              const cat = categories.find(c => c.id === id);
+              const cat = categories.find(c => c.id === id);// מצא את פרטי הקטגוריה לפי ה-id שלה
               if (!cat) return null;
               return (
                 <div key={id} className="cat-sel-chip">
-                  
                   <button className="cat-sel-remove" onClick={() => toggle(id)}>×</button>
                 </div>
               );

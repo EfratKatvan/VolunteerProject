@@ -42,7 +42,7 @@ namespace WebApiProject.Controllers
             return _mapper.Map<AvailabilitiesDto>(avail);
         }
 
-        
+        // ✅ כאן השינוי החשוב
         [HttpPost]
         public async Task<AvailabilitiesDto> Post([FromBody] AvailabilitiesDto value)
         {

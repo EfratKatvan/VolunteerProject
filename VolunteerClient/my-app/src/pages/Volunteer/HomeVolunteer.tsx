@@ -13,9 +13,7 @@ export const HomeVolunteer = () => {
     <div>
       <h1>Volunteer Home</h1>
       <p>Welcome to the Volunteer home page!</p>
-      <button onClick={() => navigate(Paths.SchedulePage)}>
-        My Schedule
-      </button>
+    
     </div>
   );
 };

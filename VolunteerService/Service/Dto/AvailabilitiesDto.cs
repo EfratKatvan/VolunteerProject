@@ -11,8 +11,8 @@ namespace Service.Dto
     public class AvailabilitiesDto
     {
         public int Id { get; set; }
-        [ForeignKey("Users")]
         public int UserID { get; set; }
+
         public DAY Day { get; set; }
         public TimeSpan From_Time { get; set; }
         public TimeSpan To_Time { get; set; }

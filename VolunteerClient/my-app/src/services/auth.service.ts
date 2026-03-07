@@ -2,7 +2,6 @@ import axios from './axios';
 import { type RegisterType, type LoginType } from '../types/auth.types';
 
 
-
 export const register = async (user: RegisterType) => {
   const response = await axios.post(`/register`, user);
   const data = response.data;
@@ -16,7 +15,7 @@ export const login = async (credentials: LoginType) => {
 
 
 export const loginByToken = async (token: string) => {
-    const response = await axios.get("/login/getUserByToken", {
+  const response = await axios.get("/login/getUserByToken", {
     headers: { Authorization: `Bearer ${token}` },
   });
   return response.data;

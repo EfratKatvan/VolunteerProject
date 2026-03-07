@@ -10,7 +10,8 @@ import LoginGuard from '../auth/LoginGuard';
 import { Paths } from './paths';
 import { UserRole } from '../types/enums.types';
 import { SchedulePage } from '../pages/Volunteer/SchedulePage';
-import  {CategoriesPage}  from '../pages/Volunteer/CategoriesPage';
+import { CategoriesPage } from '../pages/Volunteer/CategoriesPage';
+
 const router = createBrowserRouter([
   {
     path: Paths.login,

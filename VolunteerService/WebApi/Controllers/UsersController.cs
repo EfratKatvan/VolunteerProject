@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Service.Dto;
 using Service.Interfaces;
+using Service.Services;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -47,6 +48,22 @@ namespace WebApiProject.Controllers
         public async Task Delete(int id)
         {
             await _service.DeleteItem(id);
+        }
+        // הוספה של קטגוריה
+       
+
+        // הסרה של קטגוריה
+        [HttpDelete("{userId}/category/{categoryId}")]
+        public async Task<IActionResult> RemoveCategoryFromUser(int userId, int categoryId)
+        {
+            await (_service as UsersService)?.RemoveCategoryFromUser(userId, categoryId);
+            return Ok();
+        }
+        [HttpPost("{userId}/category/{categoryId}")]
+        public async Task<IActionResult> AddCategoryToUser(int userId, int categoryId)
+        {
+            await (_service as UsersService)?.AddCategoryToUser(userId, categoryId);
+            return Ok();
         }
     }
 }
