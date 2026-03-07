@@ -10,5 +10,6 @@ namespace Service.Interfaces
     public interface ILoginService
     {
         Task<UsersDto> Authenticate(LoginDto login);
+        Task<UsersDto> GetUserById(int id);
     }
 }

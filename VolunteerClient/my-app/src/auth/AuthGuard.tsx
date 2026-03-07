@@ -21,6 +21,9 @@ const AuthGuard = ({ children, roles }: Props) => {
     }
 
     if (roles && !roles.includes(user!.userRole)) {
+        console.log('user:', user);
+        console.log('user.userRole:', user!.userRole, typeof user!.userRole);
+        console.log('roles:', roles, typeof roles[0]);
         return <h1>Unauthorized</h1>
     }
 

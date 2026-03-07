@@ -57,10 +57,16 @@ namespace Repository.Repositories
 
         public async Task<List<UserCategories>> Find(string whereClause)
         {
-            int.TryParse(whereClause, out int id);
-            return await _context.UserCategories
-                .Where(uc => uc.UserID == id || uc.CategoryID == id)
-                .ToListAsync();
+            var parts = whereClause.Split('-');
+            if (parts.Length == 2 &&
+                int.TryParse(parts[0], out int userId) &&
+                int.TryParse(parts[1], out int categoryId))
+            {
+                return await _context.UserCategories
+                    .Where(uc => uc.UserID == userId && uc.CategoryID == categoryId)
+                    .ToListAsync();
+            }
+            return new List<UserCategories>();
         }
     }
 }

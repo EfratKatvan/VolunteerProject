@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Repository.Entities
 {
-    public enum DAY { Sunday, Monday, Tuesday, Wednesday, Thursday, Friday }
+    public enum DAY { Sunday, Monday, Tuesday, Wednesday, Thursday, Friday,Suterday }
     public class Availabilities
     {
         public int Id { get; set; }

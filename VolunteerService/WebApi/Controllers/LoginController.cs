@@ -23,22 +23,28 @@ namespace WebApiProject.Controllers
         }
 
         [HttpPost]
+
         public async Task<IActionResult> Post([FromBody] LoginDto loginDto)
         {
-            var user = await _loginService.Authenticate(loginDto);
-
-            if (user == null)
-                return Unauthorized("Invalid email or password");
-
-            var token = GenerateToken(user);
-
-            return Ok(new
+            try                                              // ← הוסף
             {
-                token = token,
-                user = user
-            });
-        }
+                var user = await _loginService.Authenticate(loginDto);
 
+                if (user == null)
+                    return Unauthorized("Invalid email or password");
+
+                var token = GenerateToken(user);
+                return Ok(new { token = token, user = user });
+            }
+            catch (ArgumentException ex)                    // ← הוסף
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception)                               // ← הוסף
+            {
+                return StatusCode(500, new { message = "Something went wrong, please try again" });
+            }
+        }
         private string GenerateToken(UsersDto user)
         {
             var key = new SymmetricSecurityKey(
@@ -67,6 +73,36 @@ namespace WebApiProject.Controllers
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+        [HttpGet("getUserByToken")]
+        public async Task<IActionResult> GetUserByToken()
+        {
+            // קבלת ה־JWT מהכותרת Authorization
+            var authHeader = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
+                return Unauthorized();
+
+            var token = authHeader.Substring("Bearer ".Length);
+
+            // אימות הטוקן
+            var handler = new JwtSecurityTokenHandler();
+            try
+            {
+                var jwtToken = handler.ReadJwtToken(token);
+                var userIdClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "UserId");
+                if (userIdClaim == null)
+                    return Unauthorized();
+
+                var user = await _loginService.GetUserById(int.Parse(userIdClaim.Value));
+                if (user == null)
+                    return NotFound();
+
+                return Ok(user);
+            }
+            catch
+            {
+                return Unauthorized();
+            }
         }
     }
 }

@@ -23,6 +23,8 @@ namespace Service.Services
                opt => opt.MapFrom(src => src.Availabilities
         .Select(ua => new AvailabilitiesDto
         {
+            Id= ua.Id,
+            UserID = ua.UserID,
             Day = ua.Availability.Day,
             From_Time = ua.Availability.From_Time,
             To_Time = ua.Availability.To_Time
@@ -41,10 +43,10 @@ namespace Service.Services
             // ================= Categories =================
             CreateMap<Categories, CategoriesDto>().ReverseMap();
 
-            // ================= Availabilities =================
+            // ================= Availabilities =================       
             CreateMap<AvailabilitiesDto, Availabilities>()
-    .ForMember(dest => dest.From_Time, opt => opt.MapFrom(src => DateTime.Today.Add(src.From_Time)))
-    .ForMember(dest => dest.To_Time, opt => opt.MapFrom(src => DateTime.Today.Add(src.To_Time)));
+             .ForMember(dest => dest.From_Time, opt => opt.MapFrom(src => src.From_Time))
+             .ForMember(dest => dest.To_Time, opt => opt.MapFrom(src => src.To_Time));
 
             CreateMap<Availabilities, AvailabilitiesDto>()
              .ForMember(dest => dest.From_Time, opt => opt.MapFrom(src => src.From_Time))

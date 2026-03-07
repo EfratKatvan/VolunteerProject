@@ -29,16 +29,16 @@ namespace Service.Services
                         .FirstOrDefault(u => u.Email == login.Email);
 
             if (user == null)
-                throw new ArgumentException("המשתמש לא קיים.");
+                throw new ArgumentException("User does not exist.");
 
             if (!ValidationHelper.IsValidPassword(login.Password))
-                throw new ArgumentException("סיסמה חלשה מדי");
+                throw new ArgumentException("Password too weak");
 
             if (!VerifyPassword(login.Password, user.EncryptedPassword))
-                return null;
+                throw new ArgumentException("Incorrect password");
 
             if (!ValidationHelper.IsValidEmail(login.Email))
-                throw new ArgumentException("מייל לא תקין");
+                throw new ArgumentException("Incorrect email");
 
             return _mapper.Map<UsersDto>(user);
         }
@@ -60,6 +60,17 @@ namespace Service.Services
                 var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
                 return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
             }
+        }
+        public async Task<UsersDto> GetUserById(int id)
+        {
+            // שולף את כל המשתמשים ומחזיר את זה עם ה־Id המתאים
+            var user = (await _repository.GetAll())
+                        .FirstOrDefault(u => u.Id == id);
+
+            if (user == null)
+                return null;
+
+            return _mapper.Map<UsersDto>(user);
         }
     }
 }
