@@ -4,4 +4,6 @@ export const Paths = {
   
   homeNeedy: '/homeNeedy',
   homeVolunteer: '/homeVolunteer',
+  SchedulePage: '/homeVolunteer/schedule',
+  CategoriesPage: '/homeVolunteer/categories',
 };

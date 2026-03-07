@@ -15,13 +15,15 @@ namespace Service.Services
     {
         private readonly IRepository<Users> _repository;
         private readonly IMapper _mapper;
+        private readonly IRepository<UserCategories> _userCategoriesRepository;
 
-        public UsersService(IRepository<Users> repository, IMapper mapper)
+
+        public UsersService(IRepository<Users> repository, IRepository<UserCategories> userCategoriesRepository, IMapper mapper)
         {
             _repository = repository;
+            _userCategoriesRepository = userCategoriesRepository;
             _mapper = mapper;
         }
-
         public async Task<List<UsersDto>> GetAll()
             => _mapper.Map<List<UsersDto>>(await _repository.GetAll());
 
@@ -79,6 +81,36 @@ namespace Service.Services
                     allAvailabilities.Any(a => a.Id == ua.AvailabilityID && a.Day == day)))
                 .ToList();
             return _mapper.Map<List<UsersDto>>(users);
+        }
+        public async Task RemoveCategoryFromUser(int userId, int categoryId)
+        {
+            var user = await _repository.GetById(userId);
+            if (user == null) throw new Exception("משתמש לא נמצא");
+
+            var existing = user.UserCategories.FirstOrDefault(uc => uc.CategoryID == categoryId);
+            if (existing != null)
+            {
+                user.UserCategories.Remove(existing);
+                await _repository.UpdateItem(userId, user);
+            }
+        }
+
+        
+
+        public async Task AddCategoryToUser(int userId, int categoryId)
+        {
+            // בודקים אם הקטגוריה כבר קיימת
+            var exists = (await _userCategoriesRepository.GetAll())
+                .Any(uc => uc.UserID == userId && uc.CategoryID == categoryId);
+            if (exists) return;
+
+            var userCategory = new UserCategories
+            {
+                UserID = userId,
+                CategoryID = categoryId
+            };
+
+            await _userCategoriesRepository.AddItem(userCategory); // הוספה ישירה לטבלת הקישור
         }
     }
 }

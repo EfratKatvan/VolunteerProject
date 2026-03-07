@@ -1,15 +1,22 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import LayoutNeedy from '../layouts/LayoutNeedy';
 import LayoutVolunteer from '../layouts/LayoutVolunteer';
-import HomeNeedy from '../pages/HomePages/HomeNeedy';
-import HomeVolunteer from '../pages/HomePages/HomeVolunteer';
-import LoginPage from '../pages/LoginPage';
-import {RegisterPage} from '../pages/RegisterPage';
+import { HomeVolunteer } from '../pages/Volunteer/HomeVolunteer';
+import { HomeNeedy } from '../pages/Needy/HomeNeedy';
+import { LoginPage } from '../pages/LoginPage';
+import { RegisterPage } from '../pages/RegisterPage';
 import AuthGuard from '../auth/AuthGuard';
 import LoginGuard from '../auth/LoginGuard';
 import { Paths } from './paths';
+import { UserRole } from '../types/enums.types';
+import { SchedulePage } from '../pages/Volunteer/SchedulePage';
+import { CategoriesPage } from '../pages/Volunteer/CategoriesPage';
 
 const router = createBrowserRouter([
+  {
+    path: Paths.login,
+    element: <LoginGuard><LoginPage /></LoginGuard>,
+  },
   {
     path: '/',
     element: <LoginGuard><LoginPage /></LoginGuard>,
@@ -21,26 +28,27 @@ const router = createBrowserRouter([
   {
     path: Paths.homeNeedy,
     element: (
-      <AuthGuard role="needy">
+      <AuthGuard roles={[UserRole.Needy]}>
         <LayoutNeedy />
       </AuthGuard>
     ),
     children: [
-      { path: '', element: <HomeNeedy /> },
-      // פה אפשר להוסיף עוד עמודים של Needy
+      { index: true, element: <HomeNeedy /> },
     ],
   },
   {
     path: Paths.homeVolunteer,
     element: (
-      <AuthGuard role="volunteer">
+      <AuthGuard roles={[UserRole.Volunteer]}>
         <LayoutVolunteer />
       </AuthGuard>
     ),
     children: [
-      { path: '', element: <HomeVolunteer /> },
-      // פה אפשר להוסיף עוד עמודים של Volunteer
+      { index: true, element: <HomeVolunteer /> },
+      { path: Paths.SchedulePage, element: <SchedulePage /> },
+      { path: Paths.CategoriesPage, element: <CategoriesPage /> }
     ],
+
   },
 ]);
 

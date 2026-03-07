@@ -1,4 +1,4 @@
-  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;1,400;1,700&family=Sora:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;1,400;1,700&family=Sora:wght@400;600;700&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   html, body, #root {
@@ -168,3 +168,78 @@
   .w1-foot { text-align: center; font-size: 13px; color: rgba(26,18,8,0.38); }
   .w1-foot a { color: #1a1208; font-weight: 700; text-decoration: none; }
   .w1-foot a:hover { color: #c8943c; }
+  /* ── הדבק את זה בסוף styleRegister.css ── */
+
+/* Input states */
+.w1-inp-err {
+  border-color: #c0392b !important;
+  box-shadow: 0 0 0 4px rgba(192,57,43,0.1) !important;
+}
+.w1-inp-ok {
+  border-color: #6abf69 !important;
+  box-shadow: 0 0 0 4px rgba(106,191,105,0.1) !important;
+}
+
+/* Inline error text */
+.w1-err {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #c0392b;
+  margin-top: 4px;
+  animation: w1-errIn 0.2s ease both;
+}
+.w1-err::before {
+  content: '✕';
+  font-size: 10px;
+  background: rgba(192,57,43,0.1);
+  border-radius: 50%;
+  width: 16px; height: 16px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+@keyframes w1-errIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Server error banner */
+.w1-banner-err {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 16px;
+  border-radius: 12px;
+  background: rgba(192,57,43,0.08);
+  border: 1px solid rgba(192,57,43,0.2);
+  font-size: 13px;
+  font-weight: 600;
+  color: #c0392b;
+  margin-bottom: 22px;
+  animation: w1-errIn 0.25s ease both;
+}
+
+/* Loading spinner on button */
+.w1-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+.w1-spinner {
+  display: inline-block;
+  width: 18px; height: 18px;
+  border: 2.5px solid rgba(245,237,214,0.3);
+  border-top-color: #f5edd6;
+  border-radius: 50%;
+  animation: w1-spin 0.7s linear infinite;
+}
+.w1-btn:hover .w1-spinner {
+  border-color: rgba(26,18,8,0.2);
+  border-top-color: #1a1208;
+}
+@keyframes w1-spin {
+  to { transform: rotate(360deg); }
+}

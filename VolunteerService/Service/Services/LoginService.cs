@@ -29,16 +29,16 @@ namespace Service.Services
                         .FirstOrDefault(u => u.Email == login.Email);
 
             if (user == null)
-                throw new ArgumentException("המשתמש לא קיים.");
+                throw new ArgumentException("User does not exist.");
 
             if (!ValidationHelper.IsValidPassword(login.Password))
-                throw new ArgumentException("סיסמה חלשה מדי");
+                throw new ArgumentException("Password too weak");
 
             if (!VerifyPassword(login.Password, user.EncryptedPassword))
-                return null;
+                throw new ArgumentException("Incorrect password");
 
             if (!ValidationHelper.IsValidEmail(login.Email))
-                throw new ArgumentException("מייל לא תקין");
+                throw new ArgumentException("Incorrect email");
 
             return _mapper.Map<UsersDto>(user);
         }

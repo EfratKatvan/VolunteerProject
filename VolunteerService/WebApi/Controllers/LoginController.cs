@@ -23,22 +23,28 @@ namespace WebApiProject.Controllers
         }
 
         [HttpPost]
+
         public async Task<IActionResult> Post([FromBody] LoginDto loginDto)
         {
-            var user = await _loginService.Authenticate(loginDto);
-
-            if (user == null)
-                return Unauthorized("Invalid email or password");
-
-            var token = GenerateToken(user);
-
-            return Ok(new
+            try                                              // ← הוסף
             {
-                token = token,
-                user = user
-            });
-        }
+                var user = await _loginService.Authenticate(loginDto);
 
+                if (user == null)
+                    return Unauthorized("Invalid email or password");
+
+                var token = GenerateToken(user);
+                return Ok(new { token = token, user = user });
+            }
+            catch (ArgumentException ex)                    // ← הוסף
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception)                               // ← הוסף
+            {
+                return StatusCode(500, new { message = "Something went wrong, please try again" });
+            }
+        }
         private string GenerateToken(UsersDto user)
         {
             var key = new SymmetricSecurityKey(
