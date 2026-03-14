@@ -1,0 +1,284 @@
+/* ── styleHomeVolunteer.css ── */
+
+.hv-root {
+  max-width: 1100px;
+  margin: 0 auto;
+  animation: lv-fadeUp 0.4s cubic-bezier(0.22,1,0.36,1) both;
+}
+
+/* ── Greeting ── */
+.hv-greeting {
+  font-family: 'Fraunces', serif;
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: #1a1208;
+  margin-bottom: 22px;
+}
+
+/* ── Stats ── */
+.hv-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.hv-stat-card {
+  background: #1a1208;
+  border-radius: 18px;
+  padding: 22px 24px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hv-stat-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 80% 50%, rgba(232,183,92,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hv-stat-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.hv-stat-n {
+  font-family: 'Fraunces', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #e8b75c;
+  line-height: 1;
+}
+
+.hv-stat-icon {
+  font-size: 1.3rem;
+  opacity: 0.22;
+}
+
+.hv-stat-lbl {
+  font-family: 'Sora', sans-serif;
+  font-size: 11px;
+  color: rgba(245,237,214,0.4);
+  letter-spacing: 0.02em;
+}
+
+/* ── Main Grid ── */
+.hv-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 20px;
+  align-items: start;
+}
+
+/* ── Card base ── */
+.hv-card {
+  background: #fff;
+  border: 1px solid rgba(200,137,90,0.12);
+  border-radius: 20px;
+  padding: 28px 32px;
+  box-shadow: 0 2px 16px rgba(26,18,8,0.05);
+}
+
+.hv-card-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: rgba(26,18,8,0.35);
+  margin-bottom: 22px;
+}
+
+/* ── Availability ── */
+.hv-slot-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.hv-slot-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(26,18,8,0.06);
+}
+.hv-slot-row:last-child { border-bottom: none; }
+
+.hv-slot-dot {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.hv-dot-available { background: #2ecc71; }
+.hv-dot-matched   { background: #e74c3c; }
+.hv-dot-pending   { background: #f39c12; }
+
+.hv-slot-day {
+  font-family: 'Sora', sans-serif;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #1a1208;
+  width: 110px;
+  flex-shrink: 0;
+}
+
+.hv-slot-time {
+  font-family: 'Sora', sans-serif;
+  font-size: 13px;
+  color: rgba(26,18,8,0.5);
+  flex: 1;
+}
+
+.hv-slot-badge {
+  font-family: 'Sora', sans-serif;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 5px 12px;
+  border-radius: 100px;
+}
+.hv-badge-available {
+  color: #1a7a4a;
+  background: rgba(46,204,113,0.1);
+  border: 1px solid rgba(46,204,113,0.25);
+}
+.hv-badge-matched {
+  color: #c0392b;
+  background: rgba(231,76,60,0.08);
+  border: 1px solid rgba(231,76,60,0.2);
+}
+.hv-badge-pending {
+  color: #9a6200;
+  background: rgba(243,156,18,0.1);
+  border: 1px solid rgba(243,156,18,0.25);
+}
+
+.hv-empty {
+  font-family: 'Sora', sans-serif;
+  font-size: 13px;
+  color: rgba(26,18,8,0.35);
+  padding: 20px 0;
+}
+
+/* ── Right column ── */
+.hv-right {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── Active Match ── */
+.hv-match {
+  background: #fdf6ee;
+  border-color: rgba(232,183,92,0.2);
+}
+
+.hv-match-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'Sora', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: #c8943c;
+  background: rgba(232,183,92,0.15);
+  border: 1px solid rgba(232,183,92,0.3);
+  padding: 5px 12px;
+  border-radius: 100px;
+  margin-bottom: 16px;
+}
+
+.hv-match-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #e8b75c;
+  box-shadow: 0 0 6px rgba(232,183,92,0.6);
+}
+
+.hv-match-name {
+  font-family: 'Fraunces', serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1a1208;
+  margin-bottom: 6px;
+}
+
+.hv-match-detail {
+  font-family: 'Sora', sans-serif;
+  font-size: 12px;
+  color: rgba(26,18,8,0.45);
+  margin-bottom: 18px;
+}
+
+.hv-chat-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  background: #1a1208;
+  font-family: 'Sora', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #f5edd6;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.03em;
+}
+.hv-chat-btn:hover {
+  background: #2e1f0a;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(26,18,8,0.18);
+}
+
+/* ── Quick Actions ── */
+.hv-actions {
+  background: #1a1208;
+  border-color: transparent;
+}
+
+.hv-actions-title {
+  color: rgba(245,237,214,0.3) !important;
+}
+
+.hv-action-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: none;
+  background: rgba(255,255,255,0.06);
+  font-family: 'Sora', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(245,237,214,0.85);
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 8px;
+  text-align: left;
+}
+.hv-action-btn:last-child { margin-bottom: 0; }
+.hv-action-btn:hover {
+  background: rgba(232,183,92,0.12);
+  color: #e8b75c;
+  transform: translateX(3px);
+}
+
+.hv-action-icon {
+  font-size: 15px;
+  width: 22px;
+  text-align: center;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .hv-stats { grid-template-columns: repeat(2, 1fr); }
+  .hv-grid  { grid-template-columns: 1fr; }
+}
