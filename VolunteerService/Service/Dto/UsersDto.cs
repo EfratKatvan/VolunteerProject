@@ -21,7 +21,10 @@ namespace Service.Dto
         [RegularExpression(@"^\d{9,10}$", ErrorMessage = "טלפון לא תקין")]
         public string Phone { get; set; }
 
-        public string Adress { get; set; }
+        [Required]
+        public string City { get; set; }
+        [Required]
+        public string Street { get; set; }
         public UserRole UserRole { get; set; }
         public double Rating { get; set; }
         public List<CategoriesDto> Categories { get; set; } = new List<CategoriesDto>();

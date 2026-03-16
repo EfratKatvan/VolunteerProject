@@ -15,5 +15,6 @@ namespace Service.Dto
         public string Description { get; set; }
         public HelpRequestStatus Status { get; set; }
         public DateTime CreatedAt { get; set; }
+        public Availabilities Availability { get; set; }
     }
 }

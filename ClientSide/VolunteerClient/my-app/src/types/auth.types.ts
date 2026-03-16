@@ -12,7 +12,8 @@ export type RegisterType = {
   email: string;
   password: string;
   phone: string;
-  adress: string;
+  city: string;
+  street: string;
   userRole: UserRole;
   categoryIds: number[];
   availabilities: AvailabilityType[];

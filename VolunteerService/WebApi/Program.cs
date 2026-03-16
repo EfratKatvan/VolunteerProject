@@ -57,6 +57,9 @@ builder.Services.AddScoped<IService<ChatMessagesDto>, ChatMessagesService>();
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IRegisterService, RegisterService>();
 
+//builder.Services.AddScoped<IMatchingService, MatchingService>();
+
+
 builder.Services.AddScoped<HelpRequestsService>();
 // ==========================
 // 4️⃣ JWT Authentication

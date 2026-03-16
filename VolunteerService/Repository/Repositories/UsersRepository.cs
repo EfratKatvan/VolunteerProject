@@ -100,7 +100,8 @@ namespace Repository.Repositories
                 user.Email = item.Email;
                 user.EncryptedPassword = item.EncryptedPassword;
                 user.Phone = item.Phone;
-                user.Adress = item.Adress;
+                user.City = item.City;
+                user.Street = item.Street;
                 user.Latitude = item.Latitude;
                 user.Longitude = item.Longitude;
                 user.UserRole = item.UserRole;
@@ -113,12 +114,15 @@ namespace Repository.Repositories
 
         public async Task<List<Users>> Find(string whereClause)
         {
+            // משיכת כל הנתונים מהמסד (או ביצוע שאילתה ישירה אם הטבלה גדולה)
             var all = await _context.Users.ToListAsync();
+
             return all.Where(u =>
                 u.FullName.Contains(whereClause, StringComparison.OrdinalIgnoreCase) ||
                 u.Email.Contains(whereClause, StringComparison.OrdinalIgnoreCase) ||
                 u.Phone.Contains(whereClause, StringComparison.OrdinalIgnoreCase) ||
-                u.Adress.Contains(whereClause, StringComparison.OrdinalIgnoreCase)
+                u.City.Contains(whereClause, StringComparison.OrdinalIgnoreCase) ||
+                u.Street.Contains(whereClause, StringComparison.OrdinalIgnoreCase)
             ).ToList();
         }
     }

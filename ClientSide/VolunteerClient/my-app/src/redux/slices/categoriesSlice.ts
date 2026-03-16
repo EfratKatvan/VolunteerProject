@@ -1,6 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
-import {  type CategoryType } from "../../types/categories.types";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { CategoryType } from "../../types/categories.types";
 
 interface CategoriesState {
   list: CategoryType[];
@@ -35,6 +34,10 @@ const categoriesSlice = createSlice({
     removeSelected: (state, action: PayloadAction<number>) => {
       state.selectedIds = state.selectedIds.filter(id => id !== action.payload);
     },
+    // פעולה חדשה לאיפוס קטגוריות
+    resetSelected: (state) => {
+      state.selectedIds = [];
+    },
   },
 });
 
@@ -44,6 +47,7 @@ export const {
   setSelected,
   addSelected,
   removeSelected,
+  resetSelected,
 } = categoriesSlice.actions;
 
 export default categoriesSlice.reducer;

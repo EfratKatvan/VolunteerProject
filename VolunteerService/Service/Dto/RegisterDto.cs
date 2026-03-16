@@ -13,7 +13,8 @@ namespace Service.Dto
         public string Email { get; set; }
         public string Password { get; set; }
         public string Phone { get; set; }
-        public string Adress { get; set; }
+        public string City { get; set; }
+        public string Street { get; set; }
 
         public UserRole UserRole { get; set; }
         public List<int> CategoryIds { get; set; } = new List<int>(); // ID של הקטגוריות שהמתנדב/נזקק בוחר

@@ -43,44 +43,50 @@ namespace Service.Services
             return _mapper.Map<HelpRequestsDto>(added);
         }
 
-        // פונקציה שמשלבת AI ושומרת קטגוריה בלבד, בלי לשנות DTO/Entities
         public async Task<HelpRequestsDto> AddHelpRequestWithAI(HelpRequestsDto item)
         {
             item.CreatedAt = DateTime.Now;
 
-            // 1. קבלת קטגוריה חכמה מה-AI
+            // 1. קבלת קטגוריה מה-AI
             var aiResult = await _aiService.GetCategoryFromAI(item.Description);
-
             var categoryName = aiResult.category;
             var icon = aiResult.icon;
-            var status = aiResult.status;
-            // 2. מציאת קטגוריה קיימת או יצירת חדשה
-            Categories existingCategory = null;
-            var categories = await _categoryRepository.GetAll();
-            existingCategory = categories.FirstOrDefault(c => c.Name == categoryName);
 
-            var safeCategoryName = string.IsNullOrWhiteSpace(categoryName) ? "Uncategorized" : categoryName;
+            // 2. מציאת/יצירת קטגוריה
+            var categories = await _categoryRepository.GetAll();
+            var existingCategory = categories.FirstOrDefault(c => c.Name == categoryName);
 
             if (existingCategory == null)
             {
                 existingCategory = new Categories
                 {
-                    Name = categoryName,
+                    Name = string.IsNullOrWhiteSpace(categoryName) ? "Uncategorized" : categoryName,
                     Description = categoryName,
                     Icon = icon
                 };
                 await _categoryRepository.AddItem(existingCategory);
             }
 
-            // 3. שמירת הבקשה עם הקטגוריה
+            // 3. המרת ה-DTO ל-entity כולל Availability
             var entity = _mapper.Map<HelpRequests>(item);
             entity.CategoryID = existingCategory.Id;
 
+            // 4. וידוא שה-Availability מועבר נכון מה-DTO
+            if (item.Availability != null && entity.Availability == null)
+            {
+                entity.Availability = new Availabilities
+                {
+                    UserID = item.Availability.UserID,
+                    Day = item.Availability.Day,
+                    From_Time = item.Availability.From_Time,
+                    To_Time = item.Availability.To_Time
+                };
+            }
+
+            // 5. שמירה (ה-Repository שומר Availability קודם)
             var added = await _repository.AddItem(entity);
 
-            // 4. מחזירים DTO רגיל, אפשר להחזיר גם שם קטגוריה ב‑Description אם רוצים
-            var dto = _mapper.Map<HelpRequestsDto>(added);
-            return dto;
+            return _mapper.Map<HelpRequestsDto>(added);
         }
 
         public async Task UpdateItem(int id, HelpRequestsDto item)
@@ -103,6 +109,3 @@ namespace Service.Services
         }
     }
 }
-
-
-

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 import axios from "../../services/axios";
-import type{ CategoryType } from "../../types/categories.types";
+import type { CategoryType } from "../../types/categories.types";
 import type { RootState, AppDispatch } from "../../redux/store";
 import {
   setCategories,
@@ -10,6 +10,7 @@ import {
   addSelected,
   removeSelected,
   setSelected,
+  resetSelected,
 } from "../../redux/slices/categoriesSlice";
 import "../../styles/styleCategories.css";
 
@@ -24,37 +25,41 @@ export const CategoriesPage = () => {
 
   const [loading, setLoading] = useState(true);
 
-useEffect(() => {
-  // אם כבר יש קטגוריות ב-store, לא נטען מהשרת
-  if (categories.length > 0) {
-    setLoading(false);
-    return;
-  }
+  useEffect(() => {
+    if (!user) return; // מחכה שה־user נטען
 
-  const fetchCategories = async () => {
-    try {
-      const res = await axios.get("/Categories");
-      dispatch(setCategories(res.data));
+    const fetchCategories = async () => {
+      setLoading(true);
+      try {
+        const res = await axios.get("/Categories");
+        dispatch(setCategories(res.data));
 
-      const counts: Record<number, number> = {};
-      for (const c of res.data) {
-        const r = await axios.get(`/Categories/${c.id}/usersCount`);
-        counts[c.id] = r.data;
+     const counts: Record<number, number> = {}; // ⬅ צריך להיות כאן
+await Promise.all(
+  res.data.map(async (c: CategoryType) => {
+    const r = await axios.get(`/Categories/${c.id}/usersCount`);
+    counts[c.id] = r.data;
+  })
+);
+dispatch(setVolunteersCounts(counts));
+
+
+        // אתחול selected בהתאם למשתמש החדש
+        if (user.categories && user.categories.length > 0) {
+          dispatch(setSelected(user.categories.map((c: CategoryType) => c.id)));
+        } else {
+          dispatch(resetSelected());
+        }
+
+      } catch (err) {
+        console.error("Failed to load categories:", err);
+      } finally {
+        setLoading(false);
       }
-      dispatch(setVolunteersCounts(counts));
+    };
 
-      if (user?.categories) {
-        dispatch(setSelected(user.categories.map((c: CategoryType) => c.id)));
-      }
-    } catch (err) {
-      console.error("Failed to load categories:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  fetchCategories();
-}, [dispatch, user, categories.length]);
+    fetchCategories();
+  }, [dispatch, user]);
 
   const toggle = async (id: number) => {
     if (!user) return;
@@ -64,11 +69,17 @@ useEffect(() => {
       if (isSelected) {
         await axios.delete(`/Users/${user.id}/category/${id}`);
         dispatch(removeSelected(id));
-        dispatch(setVolunteersCounts({ ...volunteersCounts, [id]: (volunteersCounts[id] ?? 1) - 1 }));
+        dispatch(setVolunteersCounts({
+          ...volunteersCounts,
+          [id]: (volunteersCounts[id] ?? 1) - 1
+        }));
       } else {
         await axios.post(`/Users/${user.id}/category/${id}`);
         dispatch(addSelected(id));
-        dispatch(setVolunteersCounts({ ...volunteersCounts, [id]: (volunteersCounts[id] ?? 0) + 1 }));
+        dispatch(setVolunteersCounts({
+          ...volunteersCounts,
+          [id]: (volunteersCounts[id] ?? 0) + 1
+        }));
       }
     } catch (err) {
       console.error("Failed to update categories:", err);
@@ -129,7 +140,7 @@ useEffect(() => {
       )}
 
       {/* Current Selection */}
-      {selected.length > 0 && (
+      {!loading && selected.length > 0 && (
         <>
           <div className="cat-section-label" style={{ marginTop: 40 }}>YOUR CURRENT SELECTION</div>
           <div className="cat-grid">
@@ -159,3 +170,5 @@ useEffect(() => {
     </div>
   );
 };
+
+

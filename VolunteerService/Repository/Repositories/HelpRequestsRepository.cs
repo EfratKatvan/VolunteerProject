@@ -19,6 +19,14 @@ namespace Repository.Repositories
 
         public async Task<HelpRequests> AddItem(HelpRequests item)
         {
+            // שומרים את הזמינות קודם כדי שתקבל Id
+            if (item.Availability != null)
+            {
+                _context.Availabilities.Add(item.Availability);
+                await _context.SaveAsync();
+                // item.Availability.Id כבר מעודכן כאן
+            }
+
             _context.HelpRequests.Add(item);
             await _context.SaveAsync();
             return item;
@@ -36,12 +44,16 @@ namespace Repository.Repositories
 
         public async Task<List<HelpRequests>> GetAll()
         {
-            return await _context.HelpRequests.ToListAsync();
+            return await _context.HelpRequests
+                .Include(hr => hr.Availability)   // ← טוען את הזמינות בכל קריאה
+                .ToListAsync();
         }
 
         public async Task<HelpRequests> GetById(int id)
         {
-            return await _context.HelpRequests.FirstOrDefaultAsync(hr => hr.Id == id);
+            return await _context.HelpRequests
+                .Include(hr => hr.Availability)   // ← טוען את הזמינות
+                .FirstOrDefaultAsync(hr => hr.Id == id);
         }
 
         public async Task UpdateItem(int id, HelpRequests item)
@@ -54,7 +66,7 @@ namespace Repository.Repositories
                 existing.Description = item.Description;
                 existing.Status = item.Status;
                 existing.CreatedAt = item.CreatedAt;
-               
+                existing.Availability = item.Availability;
                 await _context.SaveAsync();
             }
         }
@@ -62,6 +74,7 @@ namespace Repository.Repositories
         public async Task<List<HelpRequests>> Find(string whereClause)
         {
             return await _context.HelpRequests
+                .Include(hr => hr.Availability)
                 .Where(hr => hr.Description.Contains(whereClause))
                 .ToListAsync();
         }

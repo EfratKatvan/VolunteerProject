@@ -33,7 +33,9 @@ namespace Repository.Entities
         public string Phone { get; set; }
 
         [Required]
-        public string Adress { get; set; }
+        public string City { get; set; }
+        [Required]
+        public string Street { get; set; }
 
         // בדיקת טווח קואורדינטות (סטנדרט עולמי)
         [Range(-90, 90)]

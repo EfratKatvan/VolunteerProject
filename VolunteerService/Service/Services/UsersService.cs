@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BCrypt.Net;
+using Service.Helpers; // <-- כאן נשלב את GeocodingService
+
 namespace Service.Services
 {
     public class UsersService : IUserService
@@ -75,7 +77,23 @@ namespace Service.Services
 
         public async Task<UsersDto> AddItem(UsersDto item)
         {
+            // חישוב קואורדינטות
+            double latitude = 0;
+            double longitude = 0;
+            try
+            {
+                (latitude, longitude) = await GeocodingService.GetCoordinates(item.Street, item.City);
+            }
+            catch
+            {
+                latitude = 0;
+                longitude = 0;
+            }
+
             var entity = _mapper.Map<Users>(item);
+            entity.Latitude = latitude;
+            entity.Longitude = longitude;
+
             var added = await _repository.AddItem(entity);
             return _mapper.Map<UsersDto>(added);
         }
@@ -96,6 +114,20 @@ namespace Service.Services
             var existing = await _repository.GetById(id);
             if (existing != null)
             {
+                // חישוב קואורדינטות אם הכתובת השתנתה
+                if (existing.City != item.City || existing.Street != item.Street)
+                {
+                    try
+                    {
+                        (existing.Latitude, existing.Longitude) = await GeocodingService.GetCoordinates(item.Street, item.City);
+                    }
+                    catch
+                    {
+                        existing.Latitude = 0;
+                        existing.Longitude = 0;
+                    }
+                }
+
                 _mapper.Map(item, existing);
                 await _repository.UpdateItem(id, existing);
             }
@@ -131,11 +163,9 @@ namespace Service.Services
 
             await _userCategoriesRepository.AddItem(userCategory);
         }
-        // בתוך UsersService.cs
 
         public async Task CreateAdminIfNotExists()
         {
-            // בדיקה אם קיים מנהל כלשהו במסד הנתונים
             var allUsers = await _repository.GetAll();
             if (!allUsers.Any(u => u.UserRole == UserRole.Admin))
             {
@@ -143,24 +173,52 @@ namespace Service.Services
                 {
                     FullName = "Admin",
                     Email = "admin@mail.com",
-                    // הצפנת הסיסמה 123456
                     EncryptedPassword = BCrypt.Net.BCrypt.HashPassword("123456"),
                     UserRole = UserRole.Admin,
                     Phone = "0500000000",
-                    Adress = "System",
-                    Latitude = 32.0,
-                    Longitude = 34.0,
+                    City = "System",
+                    Street = "System",
                     Rating = 0
                 };
 
                 await _repository.AddItem(admin);
             }
         }
-        // בתוך UsersService.cs
+
         public async Task<Users> GetEntityByEmail(string email)
         {
             var users = await _repository.GetAll();
             return users.FirstOrDefault(u => u.Email == email);
+        }
+
+        public async Task<List<UsersDto>> GetVolunteers()
+        {
+            var users = await _repository.GetAll();
+
+            var volunteers = users
+                .Where(u => u.UserRole == UserRole.Volunteer)
+                .ToList();
+
+            var allCategories = await _categoriesRepository.GetAll();
+            var userCategories = await _userCategoriesRepository.GetAll();
+
+            var result = volunteers.Select(user =>
+            {
+                var dto = _mapper.Map<UsersDto>(user);
+
+                dto.Categories = userCategories
+                    .Where(uc => uc.UserID == user.Id)
+                    .Select(uc => allCategories
+                        .Where(c => c.Id == uc.CategoryID)
+                        .Select(c => _mapper.Map<CategoriesDto>(c))
+                        .FirstOrDefault())
+                    .Where(c => c != null)
+                    .ToList();
+
+                return dto;
+            }).ToList();
+
+            return result;
         }
     }
 }

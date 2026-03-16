@@ -7,7 +7,7 @@ using Service.Validations;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Service.Helpers;
 namespace Service.Services
 {
     public class RegisterService : IRegisterService
@@ -51,19 +51,27 @@ namespace Service.Services
 
             // יצירת המשתמש
 
+            // 1. קבלת קואורדינטות מהכתובת לפני יצירת המשתמש
+            var coordinates = await Service.Helpers.GeocodingService.GetCoordinates(register.Street, register.City);
+
+            // 2. יצירת האובייקט עם הנתונים המלאים
             var user = new Users
             {
                 FullName = register.FullName,
                 Email = register.Email,
                 Phone = register.Phone,
-                Adress = register.Adress,
+                City = register.City,
+                Street = register.Street,
                 UserRole = register.UserRole,
 
-                // הצפנת הסיסמה עם BCrypt
+                // שמירת הקואורדינטות שהתקבלו מהשירות
+                Latitude = coordinates.Item1,
+                Longitude = coordinates.Item2,
+
                 EncryptedPassword = BCrypt.Net.BCrypt.HashPassword(register.Password)
             };
-            var addedUser = await _repository.AddItem(user);
 
+            var addedUser = await _repository.AddItem(user);
             // שמירת קטגוריות
             foreach (var categoryId in register.CategoryIds)
             {

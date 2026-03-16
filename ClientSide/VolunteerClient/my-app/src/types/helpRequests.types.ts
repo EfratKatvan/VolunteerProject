@@ -1,3 +1,4 @@
+import type { AvailabilityType } from "./availabilities.types";
 import { HelpRequestStatus } from "./enums.types";
 
 export type HelpRequestType = {
@@ -7,6 +8,8 @@ export type HelpRequestType = {
   description: string;
   status: HelpRequestStatus;
   createdAt: string;
-  latitude: number;
-  longitude: number;
+    availability: AvailabilityType;
+  
+  
+
 };
