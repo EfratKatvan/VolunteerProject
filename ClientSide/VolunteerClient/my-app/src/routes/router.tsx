@@ -12,6 +12,7 @@ import { Paths } from './paths';
 import { UserRole } from '../types/enums.types';
 import { SchedulePage } from '../pages/Volunteer/SchedulePage';
 import { CategoriesPage } from '../pages/Volunteer/CategoriesPage';
+import { ChatPage } from '../pages/ChatPage';
 
 const router = createBrowserRouter([
   {
@@ -36,8 +37,9 @@ const router = createBrowserRouter([
       </AuthGuard>
     ),
     children: [
-      { index: true, element: <HomeNeedy /> },
-      {index: false, path: Paths.NewRequestPage, element: <NewRequestPage /> },
+      { index: true,                        element: <HomeNeedy />       },
+      { path: Paths.NewRequestPage,         element: <NewRequestPage />  },
+      { path: Paths.chatNeedy,              element: <ChatPage />        }, // ✅ תוקן
     ],
   },
 
@@ -50,9 +52,10 @@ const router = createBrowserRouter([
       </AuthGuard>
     ),
     children: [
-      { index: true,                       element: <HomeVolunteer />   },
-      { path: Paths.SchedulePage,          element: <SchedulePage />    },
-      { path: Paths.CategoriesPage,        element: <CategoriesPage />  },
+      { index: true,                        element: <HomeVolunteer />   },
+      { path: Paths.SchedulePage,           element: <SchedulePage />    },
+      { path: Paths.CategoriesPage,         element: <CategoriesPage />  },
+      { path: Paths.chatVolunteer,          element: <ChatPage />        },
     ],
   },
 ]);

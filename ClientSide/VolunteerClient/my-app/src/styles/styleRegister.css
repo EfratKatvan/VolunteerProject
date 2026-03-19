@@ -89,8 +89,9 @@
   .w1-right {
     background: #f5f0e8;
     display: flex; flex-direction: column; justify-content: center;
-    padding: 60px 68px;
+    padding: 32px 68px;
     min-height: 100vh;
+    overflow: hidden;
   }
 
   .w1-step {
@@ -99,10 +100,10 @@
   }
   .w1-form-h {
     font-family: 'Fraunces', serif; font-size: 2.1rem;
-    font-weight: 700; color: #1a1208; line-height: 1.12; margin-bottom: 36px;
+    font-weight: 700; color: #1a1208; line-height: 1.12; margin-bottom: 20px;
   }
 
-  .w1-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .w1-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
   .w1-span { grid-column: 1/-1; }
   .w1-f { display: flex; flex-direction: column; gap: 5px; }
   .w1-lbl {
@@ -112,7 +113,7 @@
   .w1-inp {
     background: #ede6d8;
     border: 2px solid transparent;
-    border-radius: 12px; padding: 13px 16px;
+    border-radius: 12px; padding: 10px 16px;
     font-size: 14px; font-family: 'Sora', sans-serif;
     color: #1a1208; outline: none; width: 100%;
     transition: border-color 0.2s, box-shadow 0.2s;
@@ -131,14 +132,14 @@
   .w1-role-lbl {
     font-size: 10px; font-weight: 700; letter-spacing: 0.14em;
     text-transform: uppercase; color: rgba(26,18,8,0.42);
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
-  .w1-roles { display: flex; gap: 12px; margin-bottom: 26px; }
+  .w1-roles { display: flex; gap: 12px; margin-bottom: 16px; }
   .w1-rc { position: relative; flex: 1; }
   .w1-rc input { position: absolute; opacity: 0; width: 0; height: 0; }
   .w1-rl {
     display: flex; align-items: center; gap: 11px;
-    padding: 14px 16px; background: #ede6d8;
+    padding: 11px 16px; background: #ede6d8;
     border: 2px solid transparent;
     border-radius: 13px; cursor: pointer; transition: all 0.2s;
     box-shadow: none;
@@ -154,13 +155,13 @@
   .w1-rd { font-size: 11px; color: rgba(26,18,8,0.42); margin-top: 2px; transition: color 0.2s; }
 
   .w1-btn {
-    width: 100%; padding: 16px;
+    width: 100%; padding: 13px;
     background: #1a1208; border: none; border-radius: 14px;
     font-family: 'Sora', sans-serif; font-size: 14px;
     font-weight: 700; color: #f5edd6; cursor: pointer;
     transition: all 0.22s; letter-spacing: 0.04em;
     display: flex; align-items: center; justify-content: center; gap: 10px;
-    margin-bottom: 18px;
+    margin-bottom: 12px;
   }
   .w1-btn:hover {
     background: #e8b75c; color: #1a1208;

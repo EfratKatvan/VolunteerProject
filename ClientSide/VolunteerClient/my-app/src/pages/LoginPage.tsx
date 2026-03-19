@@ -67,11 +67,7 @@ export const LoginPage = () => {
           <h1 className="ll-h1">Give help.<br /><em>Receive</em><br />kindness.</h1>
           <p className="ll-p">A space where volunteers and those in need find each other — built on trust, driven by community.</p>
         </div>
-        <div className="ll-stats">
-          <div className="ll-stat"><div className="ll-stat-n">2.4k</div><div className="ll-stat-l">Volunteers</div></div>
-          <div className="ll-stat"><div className="ll-stat-n">850</div><div className="ll-stat-l">Helped</div></div>
-          <div className="ll-stat"><div className="ll-stat-n">98%</div><div className="ll-stat-l">Satisfied</div></div>
-        </div>
+        
       </div>
 
       {/* RIGHT */}

@@ -10,7 +10,6 @@ public class AuthController : ControllerBase
     private readonly UsersService _usersService; // כאן השינוי: הזרקה של המחלקה ולא של הממשק
     private readonly IMapper _mapper;
 
-    // הזרקה ישירה של UsersService
     public AuthController(ILoginService loginService, UsersService usersService, IMapper mapper)
     {
         _loginService = loginService;

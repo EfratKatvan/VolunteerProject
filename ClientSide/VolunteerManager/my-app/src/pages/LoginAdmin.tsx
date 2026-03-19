@@ -91,22 +91,6 @@ export default function LoginAdmin() {
           community running smoothly.
         </p>
 
-        <div className="alp-stats">
-          <div className="alp-stat">
-            <div className="alp-stat-num">2.4k</div>
-            <div className="alp-stat-lbl">Users managed</div>
-          </div>
-
-          <div className="alp-stat">
-            <div className="alp-stat-num">850</div>
-            <div className="alp-stat-lbl">Requests resolved</div>
-          </div>
-
-          <div className="alp-stat">
-            <div className="alp-stat-num">98%</div>
-            <div className="alp-stat-lbl">Uptime</div>
-          </div>
-        </div>
 
       </div>
 
@@ -178,9 +162,7 @@ export default function LoginAdmin() {
 
           </form>
 
-          <p className="alp-back">
-            Back to the site? <a href="/">Go to homepage</a>
-          </p>
+          
 
         </div>
 

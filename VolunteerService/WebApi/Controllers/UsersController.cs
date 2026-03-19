@@ -51,7 +51,6 @@ namespace WebApiProject.Controllers
         {
             await _service.DeleteItem(id);
         }
-        // הוספה של קטגוריה
 
 
         // הסרה של קטגוריה
@@ -69,5 +68,30 @@ namespace WebApiProject.Controllers
             await _usersService.AddCategoryToUser(userId, categoryId);
             return Ok();
         }
+        // POST api/users/{userId}/availability/{availabilityId}
+        // מוסיף זמינות למשתמש
+        [HttpPost("{userId}/availability/{availabilityId}")]
+        public async Task<IActionResult> AddAvailabilityToUser(int userId, int availabilityId)
+        {
+            await _usersService.AddAvailabilityToUser(userId, availabilityId);
+            return Ok();
+        }
+
+        // DELETE api/users/{userId}/availability/{availabilityId}
+        // מסיר זמינות ממשתמש
+        [HttpDelete("{userId}/availability/{availabilityId}")]
+        public async Task<IActionResult> RemoveAvailabilityFromUser(int userId, int availabilityId)
+        {
+            await _usersService.RemoveAvailabilityFromUser(userId, availabilityId);
+            return Ok();
+        }
+
     }
 }
+
+
+
+
+
+
+

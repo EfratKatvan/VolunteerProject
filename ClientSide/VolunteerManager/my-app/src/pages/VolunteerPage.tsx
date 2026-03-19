@@ -16,11 +16,12 @@ type AddForm = {
   email: string;
   password: string;
   phone: string;
-  adress: string;
+  city: string;
+  street: string;
 };
 
 const EMPTY_ADD: AddForm = {
-  fullName: "", email: "", password: "", phone: "", adress: "",
+  fullName: "", email: "", password: "", phone: "", city: "", street: "",
 };
 
 // טופס Edit — שדות של Volunteer קיים (ללא Password)
@@ -34,7 +35,7 @@ export default function VolunteerPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing]     = useState<Volunteer | null>(null);
   const [addForm, setAddForm]     = useState<AddForm>(EMPTY_ADD);
-  const [editForm, setEditForm]   = useState<EditForm>({ fullName: "", email: "", phone: "", adress: "", userRole: 0, rating: 0 });
+  const [editForm, setEditForm]   = useState<EditForm>({ fullName: "", email: "", phone: "", city: "", street: "", userRole: 0, rating: 0 });
   const [deleteId, setDeleteId]   = useState<number | null>(null);
   const [saving, setSaving]       = useState(false);
 
@@ -53,7 +54,7 @@ export default function VolunteerPage() {
 
   const openEdit = (v: Volunteer) => {
     setEditing(v);
-    setEditForm({ fullName: v.fullName, email: v.email, phone: v.phone, adress: v.adress, userRole: 0, rating: v.rating });
+    setEditForm({ fullName: v.fullName, email: v.email, phone: v.phone, city: v.city, street: v.street, userRole: 0, rating: v.rating });
     setModalOpen(true);
   };
 
@@ -119,7 +120,7 @@ export default function VolunteerPage() {
           <table className="list-table">
             <thead>
               <tr>
-                {["Name", "Email", "Phone", "Address", "Rating", "Actions"].map((h) => (
+                {["Name", "Email", "Phone", "City", "Street", "Rating", "Actions"].map((h) => (
                   <th key={h} className="list-th">{h}</th>
                 ))}
               </tr>
@@ -137,7 +138,8 @@ export default function VolunteerPage() {
                   </td>
                   <td className="list-td list-td--muted">{v.email}</td>
                   <td className="list-td list-td--muted">{v.phone}</td>
-                  <td className="list-td list-td--muted">{v.adress}</td>
+                  <td className="list-td list-td--muted">{v.city}</td>
+                  <td className="list-td list-td--muted">{v.street}</td>
                   <td className="list-td">
                     <span className="list-rating">{"★".repeat(Math.round(v.rating))}{"☆".repeat(5 - Math.round(v.rating))}</span>
                   </td>
@@ -197,12 +199,20 @@ export default function VolunteerPage() {
                     : setAddForm((f) => ({ ...f, phone: e.target.value }))} />
               </div>
               <div className="modal-field">
-                <label className="modal-label">Address</label>
+                <label className="modal-label">City</label>
                 <input className="modal-input"
-                  value={editing ? editForm.adress : addForm.adress}
+                  value={editing ? editForm.city : addForm.city}
                   onChange={(e) => editing
-                    ? setEditForm((f) => ({ ...f, adress: e.target.value }))
-                    : setAddForm((f) => ({ ...f, adress: e.target.value }))} />
+                    ? setEditForm((f) => ({ ...f, city: e.target.value }))
+                    : setAddForm((f) => ({ ...f, city: e.target.value }))} />
+              </div>
+              <div className="modal-field">
+                <label className="modal-label">Street</label>
+                <input className="modal-input"
+                  value={editing ? editForm.street : addForm.street}
+                  onChange={(e) => editing
+                    ? setEditForm((f) => ({ ...f, street: e.target.value }))
+                    : setAddForm((f) => ({ ...f, street: e.target.value }))} />
               </div>
               <div className="modal-footer">
                 <button type="button" className="modal-btn-cancel" onClick={() => setModalOpen(false)}>Cancel</button>

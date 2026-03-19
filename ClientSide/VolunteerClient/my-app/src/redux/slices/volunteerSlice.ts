@@ -26,3 +26,6 @@ const volunteerSlice = createSlice({
 
 export const { setSlots, setPeopleHelped } = volunteerSlice.actions;
 export default volunteerSlice.reducer;
+
+
+

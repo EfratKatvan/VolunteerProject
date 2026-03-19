@@ -1,4 +1,3 @@
-
 import { NavLink, Outlet } from 'react-router';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../redux/store';
@@ -6,11 +5,12 @@ import { Paths } from '../routes/paths';
 import '../styles/styleLayout.css';
 
 const navItems = [
-  { label: 'Dashboard',      path: Paths.dashboard,    icon: 'M2 2h6v6H2zM10 2h6v6h-6zM2 10h6v6H2zM10 10h6v6h-6z' },
-  { label: 'Volunteers',        path: Paths.volunteers,   icon: 'M8 8a3 3 0 100-6 3 3 0 000 6zM2 14s1-4 6-4 6 4 6 4' },
-  { label: 'Needy',         path: Paths.needy,        icon: 'M2 4h12M2 8h8M2 12h10' },
-  { label: 'Categories',       path: Paths.categories,   icon: 'M2 2h5v5H2zM9 2h5v5H9zM2 9h5v5H2zM9 9h5v5H9z' },
-  { label: 'HelpRequests',     path: Paths.helpRequests, icon: 'M2 4h12M2 8h8M2 12h10M12 6l3-3M12 6l3 3' },
+  { label: 'Dashboard',    path: Paths.dashboard,   icon: 'M2 2h6v6H2zM10 2h6v6h-6zM2 10h6v6H2zM10 10h6v6h-6z' },
+  { label: 'Volunteers',   path: Paths.volunteers,  icon: 'M8 8a3 3 0 100-6 3 3 0 000 6zM2 14s1-4 6-4 6 4 6 4' },
+  { label: 'Needy',        path: Paths.needy,       icon: 'M2 4h12M2 8h8M2 12h10' },
+  { label: 'Categories',   path: Paths.categories,  icon: 'M2 2h5v5H2zM9 2h5v5H9zM2 9h5v5H2zM9 9h5v5H9z' },
+  { label: 'HelpRequests', path: Paths.helpRequests,icon: 'M2 4h12M2 8h8M2 12h10M12 6l3-3M12 6l3 3' },
+  { label: 'Assignments',  path: Paths.assignments, icon: 'M2 2h12v2H2zM2 6h8v2H2zM2 10h10v2H2zM13 9l2 2-2 2' }, // ← חדש
 ];
 
 const LayoutAdmin = () => {

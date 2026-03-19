@@ -11,7 +11,13 @@ namespace Service.Validations
     {
 
         public static bool IsValidEmail(string email)
-            => !string.IsNullOrEmpty(email) && Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return false;
+
+            return Regex.IsMatch(email,
+                @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
+        }
 
         public static bool IsValidPhone(string phone)
             => !string.IsNullOrEmpty(phone) && Regex.IsMatch(phone, @"^\d{10}$");
@@ -26,3 +32,5 @@ namespace Service.Validations
         }
     }
 }
+
+

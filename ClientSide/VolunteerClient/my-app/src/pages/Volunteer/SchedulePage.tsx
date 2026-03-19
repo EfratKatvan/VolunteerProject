@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
@@ -10,7 +11,7 @@ import { setSlots } from '../../redux/slices/volunteerSlice';
 
 const DAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-const fmtTime = (t: string) => t.slice(0, 5); // "08:00:00" → "08:00"
+const fmtTime = (t: string) => t.slice(0, 5);
 
 const getWeekDates = () => {
   const today = new Date();
@@ -30,6 +31,8 @@ const weekLabel = (dates: Date[]) =>
 
 const HOURS = Array.from({ length: 24 }, (_, h) => String(h).padStart(2, '0'));
 
+// ... (שאר ה-imports נשארים אותו דבר)
+
 export const SchedulePage = () => {
   useDocumentTitle('Schedule');
   const dispatch = useDispatch<AppDispatch>();
@@ -43,7 +46,7 @@ export const SchedulePage = () => {
   const [form, setForm] = useState({ from: '09', to: '11' });
   const [overlapError, setOverlapError] = useState(false);
 
-  // ── טעינת זמינות המשתמש מהשרת
+  // ── טעינת זמינות מהשרת
   useEffect(() => {
     if (!user) {
       dispatch(setSlots([]));
@@ -52,7 +55,9 @@ export const SchedulePage = () => {
 
     const fetchSlots = async () => {
       try {
+        // וודא שהנתיב הזה באמת מחזיר את רשימת האובייקטים המלאה
         const res = await axios.get<AvailabilityType[]>(`/Availabilities/user/${user.id}`);
+        console.log("Fetched slots:", res.data); // בדיקה בלוג שבאמת חוזר מידע
         dispatch(setSlots(res.data));
       } catch (err) {
         console.error('Failed to fetch availabilities:', err);
@@ -63,13 +68,14 @@ export const SchedulePage = () => {
     fetchSlots();
   }, [user, dispatch]);
 
-  // ── הוספת סלאוט חדש
+  // ── הוספת סלוט חדש
   const addSlot = async () => {
     if (!modal || !user) return;
     const from = Number(form.from);
     const to = Number(form.to);
     if (to <= from) return;
 
+    // בדיקת חפיפה מקומית
     const daySlots = slots.filter(s => s.day === modal.day);
     const overlap = daySlots.some(s => {
       const sFrom = Number(s.from_Time.slice(0, 2));
@@ -83,33 +89,51 @@ export const SchedulePage = () => {
       return;
     }
 
-    const newSlot = {
-      UserID: user.id,
+    const newSlotPayload = {
+      UserID: user.id, // חשוב מאוד לשלוח את זה כדי שהשליפה תעבוד בריענון עמוד
       Day: modal.day,
       From_Time: `${form.from}:00:00`,
       To_Time: `${form.to}:00:00`
     };
 
     try {
-      const res = await axios.post('/Availabilities', newSlot);
-      dispatch(setSlots([...slots, res.data]));
+      // 1. יצירת הזמינות בטבלת הזמינויות
+      const res = await axios.post('/Availabilities', newSlotPayload);
+      const savedSlot = res.data;
+
+      // 2. קישור למשתמש (לפי הלוגיקה החדשה שלך)
+      await axios.post(`/Users/${user.id}/availability/${savedSlot.id}`);
+
+      // 3. עדכון ה-State ב-Redux עם האובייקט שחזר מהשרת (כולל ה-ID החדש)
+      dispatch(setSlots([...slots, savedSlot]));
+      
+      setModal(null); // סגירת המודאל רק בהצלחה
     } catch (err) {
       console.error('Failed to save availability:', err);
-    } finally {
-      setModal(null);
+      alert('שגיאה בשמירת הזמינות. נסה שוב.');
     }
   };
 
-  // ── מחיקת סלאוט
-  const removeSlot = async (idx: number) => {
-    const slot = slots[idx];
-    try {
-      await axios.delete(`/Availabilities/${slot.id}`);
-      dispatch(setSlots(slots.filter((_, i) => i !== idx)));
-    } catch (err) {
-      console.error('Failed to delete availability:', err);
-    }
-  };
+  // ── מחיקת סלוט
+  const removeSlot = async (slotId: number) => { // שים לב: מקבל ID ולא אינדקס
+  if (!user) return;
+  
+  try {
+    // 1. מחיקה מהשרת
+    await axios.delete(`/Availabilities/${slotId}`);
+    await axios.delete(`/Users/${user.id}/availability/${slotId}`);
+    
+    // 2. עדכון ה-Redux בצורה בטוחה (סינון לפי ID)
+    const updatedSlots = slots.filter(s => s.id !== slotId);
+    dispatch(setSlots(updatedSlots));
+    
+  } catch (err) {
+    console.error('Failed to delete availability:', err);
+    alert('שגיאה במחיקת הזמינות');
+  }
+};
+
+  
 
   return (
     <div className="sch-root">
@@ -151,13 +175,12 @@ export const SchedulePage = () => {
                       <span className="sch-slot-time">
                         {fmtTime(slot.from_Time)}–{fmtTime(slot.to_Time)}
                       </span>
-                      <span className="sch-slot-label">Free</span>
-                      <button
-                        className="sch-slot-del"
-                        onClick={() => removeSlot(globalIdx)}
-                      >
-                        ×
-                      </button>
+                    <button
+  className="sch-slot-del"
+  onClick={() => slot.id !== undefined && removeSlot(slot.id)} // שלח את ה-ID של הסלוט
+>
+  ×
+</button>
                     </div>
                   );
                 })}
@@ -223,5 +246,9 @@ export const SchedulePage = () => {
     </div>
   );
 };
+
+
+
+
 
 

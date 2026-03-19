@@ -5,6 +5,7 @@ import authReducer from './slices/authSlice';
 import categoriesReducer from './slices/categoriesSlice';
 import volunteerReducer from './slices/volunteerSlice';
 import helpRequestsReducer from './slices/helpRequestsSlice';
+import assignmentsReducer from './slices/assignmentsSlice';
 
 // ── Load state מה-localStorage (ללא auth!)
 const loadState = () => {
@@ -34,6 +35,7 @@ const rootReducer = combineReducers({
   categories: categoriesReducer,
   volunteer: volunteerReducer,
   helpRequests: helpRequestsReducer,
+  assignments: assignmentsReducer,
 });
 
 const preloadedState = loadState();

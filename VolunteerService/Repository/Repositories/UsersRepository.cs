@@ -81,8 +81,8 @@ namespace Repository.Repositories
             if (user != null)
             {
                 user.Availabilities = await _context.UserAvailabilities
-                    .Where(a => a.UserID == user.Id)
-                    .ToListAsync();
+      .Where(a => a.UserID == user.Id)
+      .ToListAsync();
 
                 user.UserCategories = await _context.UserCategories
                     .Where(uc => uc.UserID == user.Id)
@@ -106,7 +106,18 @@ namespace Repository.Repositories
                 user.Longitude = item.Longitude;
                 user.UserRole = item.UserRole;
                 user.Rating = item.Rating;
-                user.Availabilities = item.Availabilities;
+                if (item.Availabilities != null)
+                {
+                    foreach (var newAvailability in item.Availabilities)
+                    {
+                        if (!user.Availabilities.Any(a => a.AvailabilityID == newAvailability.AvailabilityID))
+                        {
+                            newAvailability.UserID = user.Id;
+                            _context.UserAvailabilities.Add(newAvailability); // EF יעקוב אחרי זה
+                            user.Availabilities.Add(newAvailability);
+                        }
+                    }
+                }
                 user.UserCategories = item.UserCategories;
                 await _context.SaveAsync();
             }
@@ -125,6 +136,8 @@ namespace Repository.Repositories
                 u.Street.Contains(whereClause, StringComparison.OrdinalIgnoreCase)
             ).ToList();
         }
+
     }
 }
+
 

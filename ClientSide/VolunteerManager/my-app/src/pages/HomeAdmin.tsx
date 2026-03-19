@@ -22,7 +22,7 @@ const sections = [
   {
     title: "Categories",
     description: "Manage request categories — add & edit",
-    icon: "M2 2h5v5H2zM9 2h5v5H9zM2 9h5v5H2zM9 9h5v5H9z",
+    icon: "M2 2h5v5H2zM9 2h5v5H9zM2 9h5v5H9z",
     path: Paths.categories,
     color: "#7eb8e6",
   },
@@ -33,16 +33,22 @@ const sections = [
     path: Paths.helpRequests,
     color: "#e07070",
   },
+  {
+    title: "Assignments",
+    description: "Manage active matches — complete or cancel",
+    icon: "M2 2h12v2H2zM2 6h8v2H2zM2 10h10v2H2zM11 8l3 3-3 3",
+    path: Paths.assignments, // ← צריך להוסיף ב-paths
+    color: "#9b7de8",
+  },
 ];
 
 export default function HomeAdmin() {
   const navigate = useNavigate();
-  const { metrics } = useSelector((state: RootState) => state.dashboard);
+ 
 
   return (
     <div className="dash-main" style={{ direction: "ltr" }}>
 
-      {/* Top bar */}
       <div className="top-bar">
         <div>
           <div className="page-eyebrow">Overview</div>
@@ -54,21 +60,7 @@ export default function HomeAdmin() {
         </div>
       </div>
 
-      {/* Metrics */}
-      <div className="metrics-grid">
-        {metrics.map((m) => (
-          <div key={m.label} className="metric-card">
-            <div className="metric-label">{m.label}</div>
-            <div className="metric-value">{m.value}</div>
-            <div className={`metric-change metric-change--${m.up ? "up" : "down"}`}>
-              <span className="metric-arrow">{m.up ? "↑" : "↓"}</span>
-              {m.change}
-            </div>
-          </div>
-        ))}
-      </div>
 
-      {/* Quick navigation cards */}
       <div className="section">
         <div className="section-header">
           <h2 className="section-title">System Management</h2>

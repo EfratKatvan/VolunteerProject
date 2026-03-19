@@ -205,11 +205,7 @@ export const RegisterPage = () => {
             built on trust, driven by community.
           </p>
         </div>
-        <div className="w1-stats">
-          <div className="w1-stat"><div className="w1-stat-n">2.4k</div><div className="w1-stat-l">Volunteers</div></div>
-          <div className="w1-stat"><div className="w1-stat-n">850</div><div className="w1-stat-l">Helped</div></div>
-          <div className="w1-stat"><div className="w1-stat-n">98%</div><div className="w1-stat-l">Satisfied</div></div>
-        </div>
+       
       </div>
 
       {/* ── RIGHT ── */}

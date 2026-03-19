@@ -15,11 +15,12 @@ type AddForm = {
   email: string;
   password: string;
   phone: string;
-  adress: string;
+  city: string;
+  street: string;
 };
 
 const EMPTY_ADD: AddForm = {
-  fullName: "", email: "", password: "", phone: "", adress: "",
+  fullName: "", email: "", password: "", phone: "", city: "",street:"",
 };
 
 type EditForm = Omit<Needy, "id">;
@@ -32,7 +33,7 @@ export default function NeedyPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing]     = useState<Needy | null>(null);
   const [addForm, setAddForm]     = useState<AddForm>(EMPTY_ADD);
-  const [editForm, setEditForm]   = useState<EditForm>({ fullName: "", email: "", phone: "", adress: "", userRole: 1, rating: 0 });
+  const [editForm, setEditForm]   = useState<EditForm>({ fullName: "", email: "", phone: "", city: "",street:"", userRole: 1, rating: 0 });
   const [deleteId, setDeleteId]   = useState<number | null>(null);
   const [saving, setSaving]       = useState(false);
 
@@ -51,7 +52,7 @@ export default function NeedyPage() {
 
   const openEdit = (n: Needy) => {
     setEditing(n);
-    setEditForm({ fullName: n.fullName, email: n.email, phone: n.phone, adress: n.adress, userRole: 1, rating: n.rating });
+    setEditForm({ fullName: n.fullName, email: n.email, phone: n.phone, city: n.city, street: n.street, userRole: 1, rating: n.rating });
     setModalOpen(true);
   };
 
@@ -117,7 +118,7 @@ export default function NeedyPage() {
           <table className="list-table">
             <thead>
               <tr>
-                {["Name", "Email", "Phone", "Address", "Rating", "Actions"].map((h) => (
+                {["Name", "Email", "Phone", "City", "Street", "Rating", "Actions"].map((h) => (
                   <th key={h} className="list-th">{h}</th>
                 ))}
               </tr>
@@ -135,7 +136,8 @@ export default function NeedyPage() {
                   </td>
                   <td className="list-td list-td--muted">{n.email}</td>
                   <td className="list-td list-td--muted">{n.phone}</td>
-                  <td className="list-td list-td--muted">{n.adress}</td>
+                  <td className="list-td list-td--muted">{n.city}</td>
+                  <td className="list-td list-td--muted">{n.street}</td>
                   <td className="list-td">
                     <span className="list-rating">{"★".repeat(Math.round(n.rating))}{"☆".repeat(5 - Math.round(n.rating))}</span>
                   </td>
@@ -193,12 +195,20 @@ export default function NeedyPage() {
                     : setAddForm((f) => ({ ...f, phone: e.target.value }))} />
               </div>
               <div className="modal-field">
-                <label className="modal-label">Address</label>
+                <label className="modal-label">City</label>
                 <input className="modal-input"
-                  value={editing ? editForm.adress : addForm.adress}
+                  value={editing ? editForm.city : addForm.city}
                   onChange={(e) => editing
-                    ? setEditForm((f) => ({ ...f, adress: e.target.value }))
-                    : setAddForm((f) => ({ ...f, adress: e.target.value }))} />
+                    ? setEditForm((f) => ({ ...f, city: e.target.value }))
+                    : setAddForm((f) => ({ ...f, city: e.target.value }))} />
+              </div>
+              <div className="modal-field">
+                <label className="modal-label">Street</label>
+                <input className="modal-input"
+                  value={editing ? editForm.street : addForm.street}
+                  onChange={(e) => editing
+                    ? setEditForm((f) => ({ ...f, street: e.target.value }))
+                    : setAddForm((f) => ({ ...f, street: e.target.value }))} />
               </div>
               <div className="modal-footer">
                 <button type="button" className="modal-btn-cancel" onClick={() => setModalOpen(false)}>Cancel</button>

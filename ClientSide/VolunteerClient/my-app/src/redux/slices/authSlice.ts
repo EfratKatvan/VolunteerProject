@@ -7,6 +7,9 @@ interface User {
   id: number;
   fullName: string;
   email: string;
+  phone?: string;
+  city?: string;
+  street?: string;
   userRole: UserRole;
   categories: CategoryType[];
   availabilities: AvailabilityType[];
@@ -17,7 +20,7 @@ interface AuthState {
   user: User | null;
   token: string | null;
   isAuthenticated: boolean;
-  isInitialized: boolean; // ← חדש: האם בדיקת הטוקן הסתיימה?
+  isInitialized: boolean;
   loading: boolean;
   error: string | null;
 }
@@ -44,7 +47,7 @@ const authSlice = createSlice({
       state.user = action.payload.user;
       state.token = action.payload.token;
       state.isAuthenticated = true;
-      state.isInitialized = true; // ← גם login רגיל מסמן אתחול הושלם
+      state.isInitialized = true;
       state.error = null;
     },
     authFailure: (state, action: PayloadAction<string>) => {
@@ -55,7 +58,6 @@ const authSlice = createSlice({
       state.error = null;
     },
     initializationComplete: (state) => {
-      // נקרא כשאין טוקן או שהטוקן לא תקף — אתחול הושלם בלי משתמש
       state.isInitialized = true;
     },
     logout: (state) => {
@@ -64,6 +66,12 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       state.isInitialized = true;
       state.error = null;
+    },
+    // ← חדש: עדכון שדות פרופיל בלבד
+    updateUser: (state, action: PayloadAction<Partial<User>>) => {
+      if (state.user) {
+        state.user = { ...state.user, ...action.payload };
+      }
     },
   },
 });
@@ -75,6 +83,7 @@ export const {
   clearError,
   initializationComplete,
   logout,
+  updateUser,   // ← ייצוא החדש
 } = authSlice.actions;
 
 export default authSlice.reducer;

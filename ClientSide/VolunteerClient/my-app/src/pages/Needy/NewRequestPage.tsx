@@ -85,7 +85,7 @@ export const NewRequestPage = () => {
         needyID: user.id,
         categoryID: 0,
         description: text.trim(),
-        status: 1,
+        status: 0,
         createdAt: new Date().toISOString(),
         availability,
       };
@@ -102,19 +102,32 @@ export const NewRequestPage = () => {
 
   /* ── Success screen ── */
   if (sent) {
-    return (
-      <div className="req-root">
-        <div className="req-success">
-          <div className="req-success-icon">🤖</div>
-          <h2 className="req-success-title">Request Sent!</h2>
-          <p className="req-success-sub">
-            Your request has been received. We'll match you with a volunteer soon.
-          </p>
-        </div>
-      </div>
-    );
-  }
+  return (
+    <div className="req-root">
+      <div className="req-success">
+        <div className="req-success-icon">🤖</div>
+        <h2 className="req-success-title">Request Sent!</h2>
+        <p className="req-success-sub">
+          Your request has been categorized successfully. We'll match you with a volunteer soon.
+        </p>
 
+        <button
+          className="req-new-btn"
+          onClick={() => {
+            setSent(false);
+            setText("");
+            setDay(null);
+            setFromTime("");
+            setToTime("");
+            setErrors({});
+          }}
+        >
+          + New Request
+        </button>
+      </div>
+    </div>
+  );
+}
   return (
     <div className="req-root">
       <form onSubmit={(e) => { e.preventDefault(); submit(); }}>
@@ -244,3 +257,4 @@ export const NewRequestPage = () => {
     </div>
   );
 };
+

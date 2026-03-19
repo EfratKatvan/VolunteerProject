@@ -1,7 +1,24 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../services/api";
 
-export type HelpRequestStatus = "Pending" | "Matched" | "InProgress" | "Completed" | "Cancelled";
+export type HelpRequestStatus = "Open" | "Matched" | "Completed" | "Cancelled";
+
+export type Day =
+  | "Monday"
+  | "Tuesday"
+  | "Wednesday"
+  | "Thursday"
+  | "Friday"
+  | "Saturday"
+  | "Sunday";
+
+export type AvailabilityType = {
+  id?: number;
+  userId: number;
+  day: Day;
+  from_Time: string;
+  to_Time: string;
+};
 
 export type HelpRequestType = {
   id: number;
@@ -10,8 +27,7 @@ export type HelpRequestType = {
   description: string;
   status: HelpRequestStatus;
   createdAt: string;
-  latitude: number;
-  longitude: number;
+  availability?: AvailabilityType; // ✅ אופציונלי כדי שלא יפיל
 };
 
 // GET
@@ -32,7 +48,7 @@ export const addRequestAsync = createAsyncThunk(
   }
 );
 
-// UPDATE
+// UPDATE (כולל סטטוס)
 export const updateRequestAsync = createAsyncThunk(
   "helpRequests/updateRequest",
   async (request: HelpRequestType) => {
@@ -47,15 +63,6 @@ export const deleteRequestAsync = createAsyncThunk(
   async (id: number) => {
     await api.delete(`/api/HelpRequests/${id}`);
     return id;
-  }
-);
-
-// STATUS UPDATE
-export const updateStatusAsync = createAsyncThunk(
-  "helpRequests/updateStatus",
-  async ({ id, status }: { id: number; status: HelpRequestStatus }) => {
-    await api.patch(`/api/HelpRequests/${id}/status`, { status });
-    return { id, status };
   }
 );
 
@@ -96,9 +103,11 @@ const helpRequestsSlice = createSlice({
         state.items.push(action.payload);
       })
 
-      // UPDATE
+      // UPDATE (כולל סטטוס)
       .addCase(updateRequestAsync.fulfilled, (state, action) => {
-        const index = state.items.findIndex(r => r.id === action.payload.id);
+        const index = state.items.findIndex(
+          (r) => r.id === action.payload.id
+        );
         if (index !== -1) {
           state.items[index] = action.payload;
         }
@@ -106,18 +115,9 @@ const helpRequestsSlice = createSlice({
 
       // DELETE
       .addCase(deleteRequestAsync.fulfilled, (state, action) => {
-        state.items = state.items.filter(r => r.id !== action.payload);
-      })
-
-      // STATUS
-      .addCase(updateStatusAsync.fulfilled, (state, action) => {
-        const r = state.items.find(r => r.id === action.payload.id);
-        if (r) {
-          r.status = action.payload.status;
-        }
+        state.items = state.items.filter((r) => r.id !== action.payload);
       });
   },
 });
 
 export default helpRequestsSlice.reducer;
-

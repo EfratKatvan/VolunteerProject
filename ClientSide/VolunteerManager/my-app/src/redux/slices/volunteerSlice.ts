@@ -6,7 +6,8 @@ export interface Volunteer {
   fullName: string;
   email: string;
   phone: string;
-  adress: string;
+  city: string;
+  street: string;
   userRole: 0;
   rating: number;
 }
@@ -32,13 +33,14 @@ export const fetchVolunteers = createAsyncThunk("volunteers/fetchAll", async () 
 // POST /api/Register — בדיוק כמו RegisterDto בשרת
 export const addVolunteer = createAsyncThunk(
   "volunteers/add",
-  async (data: { fullName: string; email: string; password: string; phone: string; adress: string }) => {
+  async (data: { fullName: string; email: string; password: string; phone: string; city: string; street: string }) => {
     const res = await api.post("/api/Register", {
       fullName:       data.fullName,
       email:          data.email,
       password:       data.password,
       phone:          data.phone,
-      adress:         data.adress,
+      city:         data.city,
+      street:       data.street,
       userRole:       0,          // Volunteer
       categoryIds:    [],
       availabilities: [],

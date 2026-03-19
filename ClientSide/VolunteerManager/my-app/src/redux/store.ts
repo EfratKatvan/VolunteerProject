@@ -6,16 +6,19 @@ import dashboardReducer from "./slices/homeSlice";
 import helpRequestsReducer from "./slices/helpRequestsSlice";
 import volunteersReducer from "./slices/volunteerSlice";
 import needyReducer from "./slices/needySlice";
+import matchingReducer from "./slices/matchingSlice";
+import assignmentsReducer from "../redux/slices/assignmentsSlice"; // ← חדש
 
 export const store = configureStore({
   reducer: {
-    auth: authReducer,
-    dashboard: dashboardReducer,
-    categories: categoriesReducer, // ← חייב להיות כאן
-        helpRequests: helpRequestsReducer,
-    volunteers: volunteersReducer,
-    needy: needyReducer,
-
+    auth:         authReducer,
+    dashboard:    dashboardReducer,
+    categories:   categoriesReducer,
+    helpRequests: helpRequestsReducer,
+    volunteers:   volunteersReducer,
+    needy:        needyReducer,
+    matching:     matchingReducer,
+    assignments:  assignmentsReducer, // ← חדש
   },
 });
 

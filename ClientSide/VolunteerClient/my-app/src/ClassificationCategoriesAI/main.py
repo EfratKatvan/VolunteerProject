@@ -90,27 +90,87 @@ def load_categories_update_embeddings():
 # --- פונקציה חכמה ליצירת שם ואייקון ---
 def generate_category_name_icon(text):
     # ניקוי מילים מיותרות
-    words = [w for w in text.split() if w.lower() not in ["i", "need", "help", "please", "someone", "my", "me", "with", "the"]]
+    words = [w for w in text.split() if w.lower() not in ["i", "need", "help", "please", "someone", "my", "me", "with", "the","want"]]
     if not words:
         words = text.split()
     # שם קטגוריה – עד 2 מילים ראשונות
-    name = " ".join(words[:2]).title()
+    name = " ".join(words[:3]).title()
     # התאמת אייקון לפי מילת מפתח
     keyword_icons = {
-        "food": "🍲",
-        "meal": "🥘",
-        "study": "📚",
-        "homework": "📖",
-        "grocery": "🛒",
-        "transport": "🚗",
-        "medical": "💉",
-        "child": "🍼",
-        "pet": "🐶",
-        "dog": "🐕",
-        "cat": "🐈",
-        "clean": "🧹",
-        "community": "🏘️"
-    }
+    "food": "🍲",
+    "meal": "🥘",
+    "study": "📚",
+    "homework": "📖",
+    "grocery": "🛒",
+    "transport": "🚗",
+    "medical": "💉",
+    "child": "🍼",
+    "pet": "🐶",
+    "dog": "🐕",
+    "cat": "🐈",
+    "clean": "🧹",
+    "community": "🏘️",
+    "shopping": "🛍️",
+    "clothes": "👕",
+    "laundry": "🧺",
+    "repair": "🔧",
+    "electric": "💡",
+    "plumbing": "🚿",
+    "garden": "🌱",
+    "moving": "📦",
+    "delivery": "📬",
+    "mail": "✉️",
+    "phone": "📱",
+    "computer": "💻",
+    "internet": "🌐",
+    "teaching": "🧑‍🏫",
+    "school": "🏫",
+    "elderly": "👴",
+    "support": "🤝",
+    "volunteer": "🙋",
+    "event": "🎉",
+    "holiday": "🎁",
+    "security": "🔒",
+    "legal": "⚖️",
+    "finance": "💰",
+    "bank": "🏦",
+    "insurance": "🛡️",
+    "health": "❤️",
+    "pharmacy": "💊",
+    "hospital": "🏥",
+    "exercise": "🏃",
+    "sports": "⚽",
+    "bicycle": "🚴",
+    "car": "🚙",
+    "bus": "🚌",
+    "taxi": "🚕",
+    "train": "🚆",
+    "flight": "✈️",
+    "cleaning": "🧼",
+    "trash": "🗑️",
+    "recycling": "♻️",
+    "painting": "🎨",
+    "design": "🖌️",
+    "music": "🎵",
+    "reading": "📚",
+    "writing": "✍️",
+    "translation": "🌍",
+    "language": "🗣️",
+    "meeting": "📅",
+    "planning": "📝",
+    "schedule": "⏰",
+    "time": "⌛",
+    "weather": "🌦️",
+    "emergency": "🚨",
+    "fire": "🔥",
+    "police": "👮",
+    "water": "💧",
+    "electricity": "⚡",
+    "family": "👨‍👩‍👧‍👦",
+    "friends": "👫",
+    "help": "🆘",
+    "assistance": "🤲"
+}
     icon = "✨"
     for word in words:
         key = word.lower()

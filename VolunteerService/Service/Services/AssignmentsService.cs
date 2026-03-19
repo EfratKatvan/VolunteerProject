@@ -12,21 +12,28 @@ namespace Service.Services
 {
     public class AssignmentsService : IService<AssignmentsDto>
     {
+        // רפוזיטורי לגישה לטבלת Assignments במסד הנתונים
         private readonly IRepository<Assignments> _repository;
+
+        // AutoMapper — לממפה בין Entities ל-DTOs ובחזרה
         private readonly IMapper _mapper;
 
+        // הזרקת תלויות דרך הקונסטרקטור (Dependency Injection)
         public AssignmentsService(IRepository<Assignments> repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
         }
 
+        // שליפת כל השידוכים ממסד הנתונים וממיפה אותם ל-DTOs
         public async Task<List<AssignmentsDto>> GetAll()
             => _mapper.Map<List<AssignmentsDto>>(await _repository.GetAll());
 
+        // שליפת שידוך בודד לפי מזהה
         public async Task<AssignmentsDto> GetById(int id)
             => _mapper.Map<AssignmentsDto>(await _repository.GetById(id));
 
+        // יצירת שידוך חדש
         public async Task<AssignmentsDto> AddItem(AssignmentsDto item)
         {
             var entity = _mapper.Map<Assignments>(item);
@@ -36,6 +43,8 @@ namespace Service.Services
             return _mapper.Map<AssignmentsDto>(added);
         }
 
+        // עדכון שידוך קיים לפי מזהה
+        // שולף את ה-entity הקיים ואז ממפה אליו את השינויים — שומר על שדות שלא נשלחו ב-DTO
         public async Task UpdateItem(int id, AssignmentsDto item)
         {
             var existing = await _repository.GetById(id);
@@ -46,9 +55,12 @@ namespace Service.Services
             }
         }
 
+        // מחיקת שידוך לפי מזהה
         public async Task DeleteItem(int id)
             => await _repository.DeleteItem(id);
 
+        // שליפת כל השידוכים של מתנדב ספציפי לפי VolunteerID
+        // משמש לעמוד הבית של המתנדב להצגת המשימות שלו
         public async Task<List<AssignmentsDto>> GetAssignmentsByVolunteer(int volunteerId)
         {
             var entities = (await _repository.GetAll())
@@ -57,12 +69,16 @@ namespace Service.Services
             return _mapper.Map<List<AssignmentsDto>>(entities);
         }
 
+        // שליפת שידוכים לפי סטטוס (Active / Finished / Cancelled)
+        // משתמש ב-Find הגנרי של הרפוזיטורי עם מחרוזת הסטטוס
         public async Task<List<AssignmentsDto>> GetAssignmentsByStatus(AssignmentStatus status)
         {
             var entities = await _repository.Find(status.ToString());
             return _mapper.Map<List<AssignmentsDto>>(entities);
         }
 
+        // סיום שידוך — מעביר סטטוס ל-Finished
+        // נקרא כשהמנהל מאשר שסיים לעזור
         public async Task CompleteAssignment(int id)
         {
             var entity = await _repository.GetById(id);
@@ -73,6 +89,8 @@ namespace Service.Services
             }
         }
 
+        // ביטול שידוך — מעביר סטטוס ל-Cancelled
+        // נקרא כשמתנדב או נזקק מבטלים את הפגישה
         public async Task CancelAssignment(int id)
         {
             var entity = await _repository.GetById(id);
@@ -82,6 +100,10 @@ namespace Service.Services
                 await _repository.UpdateItem(id, entity);
             }
         }
+
+        // ספירת מספר האנשים שהמתנדב עזר להם בפועל
+        // סופר רק שידוכים שהסתיימו (Finished) — לא פעילים ולא מבוטלים
+        // משמש להצגת "People Helped" בסטטיסטיקות עמוד הבית של המתנדב
         public async Task<int> GetHelpedCountByVolunteer(int volunteerId)
         {
             var allAssignments = await _repository.GetAll();
@@ -93,5 +115,6 @@ namespace Service.Services
 
             return finishedCount;
         }
+
     }
 }

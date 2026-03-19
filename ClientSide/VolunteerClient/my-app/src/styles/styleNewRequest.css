@@ -1,3 +1,4 @@
+
 /* ── styleNewRequest.css ── */
 
 .req-root {
@@ -230,4 +231,29 @@
   .req-quick-times { grid-template-columns: 1fr; }
   .req-time-row { flex-direction: column; gap: 0; }
   .req-time-arrow { display: none; }
+}
+/* ── New Request Button ── */
+.req-new-btn {
+  margin-top: 28px;
+  padding: 14px 22px;
+  border-radius: 14px;
+  border: 2px solid #e8b75c;
+  background: transparent;
+
+  font-family: 'Sora', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+
+  color: #1a1208;
+  cursor: pointer;
+
+  transition: all 0.22s ease;
+}
+
+.req-new-btn:hover {
+  background: #e8b75c;
+  color: #1a1208;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(232,183,92,0.3);
 }

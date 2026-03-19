@@ -38,35 +38,7 @@ namespace WebApiProject.Controllers
             catch (ArgumentException ex) { return BadRequest(new { message = ex.Message }); }
             catch (Exception ex) { return StatusCode(500, new { message = ex.Message }); } // שרשרי את ex.Message לדיבוג
         }
-        private string GenerateToken(UsersDto user)
-        {
-            var key = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(_config["Jwt:Key"])
-            );
-
-            var credentials = new SigningCredentials(
-                key,
-                SecurityAlgorithms.HmacSha256
-            );
-
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.Name, user.FullName),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, user.UserRole.ToString()),
-                new Claim("UserId", user.Id.ToString())
-            };
-
-            var token = new JwtSecurityToken(
-                issuer: _config["Jwt:Issuer"],
-                audience: _config["Jwt:Audience"],
-                claims: claims,
-                expires: DateTime.Now.AddHours(2),
-                signingCredentials: credentials
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
+     
         [HttpGet("getUserByToken")]
         public async Task<IActionResult> GetUserByToken()
         {
@@ -81,6 +53,7 @@ namespace WebApiProject.Controllers
             var handler = new JwtSecurityTokenHandler();
             try
             {
+                //פענח טוקן
                 var jwtToken = handler.ReadJwtToken(token);
                 var userIdClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "UserId");
                 if (userIdClaim == null)

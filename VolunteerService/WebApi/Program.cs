@@ -12,7 +12,7 @@ using Service.Dto;
 using Service.Interfaces;
 using Service.Services;
 using System.Text;
-using BCrypt.Net; // <-- ודאי שהתקנת את החבילה בפרויקט ה-WebApi
+using BCrypt.Net; 
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,6 +61,7 @@ builder.Services.AddScoped<IRegisterService, RegisterService>();
 
 
 builder.Services.AddScoped<HelpRequestsService>();
+builder.Services.AddScoped<MatchingService>();
 // ==========================
 // 4️⃣ JWT Authentication
 // ==========================
